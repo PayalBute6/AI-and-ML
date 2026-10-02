@@ -1,3 +1,13 @@
+# State Space Tree:
+#
+#             Start
+#            /     \
+#      State_1     State_2
+#      /     \     /     \
+#  State_3 State_4 State_5 Goal
+#             \
+#             Goal
+
 from collections import deque
 
 state_space = {
