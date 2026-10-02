@@ -1,11 +1,8 @@
-# Q 3. Write a program toiImplement BFS traversal for a graph.
-        #       A
-        #     /   \
-        #    B     C
-        #   / \   / \
-        #  D   E F   G
-        #           ↑
-        #         Goal
+#       A
+#     /   \
+#    B     C
+#   / \   / \
+#  D   E F   G
 
 from collections import deque
 
