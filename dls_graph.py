@@ -1,3 +1,13 @@
+# Graph with Depth Levels:
+#
+# Level 0:        A
+#               /   \
+# Level 1:     B     C
+#             / \     \
+# Level 2:   D   E     F
+#                ↑
+#             Target
+
 def dls(graph, node, target, limit, visited):
     if node == target:
         return True
