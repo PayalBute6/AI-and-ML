@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Problem Solving Using Search</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #475569;
+            --background: #f8fafc;
+            --card: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--background);
+            margin: 0;
+            padding: 2rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-top: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        .highlight-box {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .code-block {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .assignment-box {
+            background-color: #fcfdfd;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .marathi-box {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .tree-diagram {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre;
+            text-align: center;
+            line-height: 1.2;
+            color: #334155;
+            border: 1px solid var(--border);
+        }
+
+        .teaching-plan {
+            background-color: #fcfdfd;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .next-step {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Problem Solving & Search</h1>
+
+        <h2>1. What is Artificial Intelligence?</h2>
+        <div class="highlight-box">
+            <strong>Definition:</strong> AI is the ability of a machine to perform tasks that normally require human intelligence—such as recognizing patterns, making decisions, and solving problems.
+        </div>
+        <p><strong>Daily Examples:</strong> Instagram recommendation feed, Google Maps pathfinding, chess bots.</p>
+
+        <h2>2. The 5 Core Components of a Search Problem</h2>
+        <p>Every search problem in AI breaks down into exactly 5 pieces:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Plain English Meaning</th>
+                    <th>Real-Life (Home to College)</th>
+                    <th>AI Technical Term</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Initial State</td>
+                    <td>Where do we start right now?</td>
+                    <td>At home</td>
+                    <td>Initial State</td>
+                </tr>
+                <tr>
+                    <td>2. Goal State</td>
+                    <td>Where do we want to finish?</td>
+                    <td>College classroom</td>
+                    <td>Goal State</td>
+                </tr>
+                <tr>
+                    <td>3. State Space</td>
+                    <td>Every possible location we could visit</td>
+                    <td>Home, Bus Stop, Chowk, Station, College</td>
+                    <td>State Space</td>
+                </tr>
+                <tr>
+                    <td>4. Operators (Actions)</td>
+                    <td>What actions move us from place to place?</td>
+                    <td>Walk, Take Bus, Turn Left</td>
+                    <td>Operators / Actions</td>
+                </tr>
+                <tr>
+                    <td>5. Path Cost</td>
+                    <td>What does taking that path cost us?</td>
+                    <td>5 km distance or 25 minutes time</td>
+                    <td>Path Cost</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="highlight-box">
+            <h3>Key Confusion to Fix Early</h3>
+            <ul>
+                <li><strong>State Space:</strong> The entire collection of all possible locations/situations.</li>
+                <li><strong>State Space Representation:</strong> The actual diagram (nodes and lines) you draw on paper or code into a computer to show those states and moves.</li>
+            </ul>
+        </div>
+
+        <h2>3. The 6 Steps in AI Problem Solving</h2>
+        <ol>
+            <li><strong>Define the Problem:</strong> "I need to reach college before 9:00 AM."</li>
+            <li><strong>Determine Initial State:</strong> "I am standing at my front door."</li>
+            <li><strong>Define Goal State:</strong> "Inside the AI lab."</li>
+            <li><strong>Generate Potential Actions:</strong> "Can I walk? Take a bus? Take an auto?"</li>
+            <li><strong>Find the Solution Path:</strong> "The bus route is fastest today—select that sequence of stops."</li>
+            <li><strong>Implement the Solution:</strong> "Actually take the bus (execute the Python script)."</li>
+        </ol>
+
+        <h2>Board Layout (What to Draw on the Blackboard)</h2>
+        <div class="code-block">
+               [ Home ]  &lt;-- Initial State
+              /        \
+        (Walk)          (Bus)  &lt;-- Operators / Actions
+            /            \
+     [ Bus Stop ]     [ Station ]
+            \            /
+             [ College ]  &lt;-- Goal State (Target Reached)
+        </div>
+        <ul>
+            <li><strong>Boxes/Circles (Nodes):</strong> Represent States.</li>
+            <li><strong>Arrows (Edges):</strong> Represent Actions/Operators.</li>
+            <li><strong>Numbers on Arrows (e.g., 5 km, 20 mins):</strong> Represent Path Cost.</li>
+        </ul>
+
+        <div class="assignment-box">
+            <h2>Student Notebook Snapshot (Give 5 Minutes to Copy)</h2>
+            <h3>Assignment 1: Problem Solving Using Search</h3>
+            <p><strong>Definition:</strong> A problem-solving approach in AI where an agent examines possible states and actions to find a path from an Initial State to a Goal State.</p>
+            
+            <h4>5 Key Components:</h4>
+            <ul>
+                <li><strong>Initial State:</strong> The starting point of the agent.</li>
+                <li><strong>Goal State:</strong> The target state to achieve.</li>
+                <li><strong>State Space:</strong> The set of all valid states reachable from the start.</li>
+                <li><strong>Operators / Actions:</strong> Valid moves that transition the agent between states.</li>
+                <li><strong>Path Cost:</strong> A numeric value reflecting distance, time, or energy spent.</li>
+                <li><strong>State Space Representation:</strong> A mathematical or graphical model (using nodes and edges) that represents states and their transitions.</li>
+            </ul>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <h1>CS-321-VSC-P — Assignment 1</h1>
+        <h2>Lesson 2: Blind / Uninformed Search — BFS</h2>
+        <p><em>Your workbook now moves from <strong>State Space Representation</strong> to <strong>Blind / Uninformed Search</strong>, beginning with <strong>Breadth First Search (BFS)</strong>.</em></p>
+
+        <h2>1. First understand: What is Search?</h2>
+        <p>Before BFS, ask students:</p>
+        <div class="highlight-box">
+            <strong>"We know the starting state and the goal state. But how do we find the path between them?"</strong><br><br>
+            <strong>Answer:</strong> We use a search technique.
+        </div>
+        
+        <div class="marathi-box">
+            <strong>Marathi:</strong> आपल्याला Initial State आणि Goal State माहीत आहे. पण Initial State पासून Goal State पर्यंत कसे जायचे हे शोधण्यासाठी Search वापरतो.
+        </div>
+
+        <p>There are different search techniques. For Assignment 1, the important ones are:</p>
+        <div class="tree-diagram" style="text-align: left;">Search
+  |
+  ├── BFS
+  ├── DFS
+  └── DLS</div>
+
+        <h2>2. What does "Blind Search" mean?</h2>
+        <div class="highlight-box">
+            <strong>Blind / Uninformed Search:</strong> A search technique that does <strong>not use additional information or a heuristic</strong> about how close a state is to the goal.
+        </div>
+        
+        <div class="marathi-box">
+            <strong>Marathi:</strong> Blind Search म्हणजे goal कुठे आहे किंवा कोणता state goal च्या जवळ आहे याची extra information न वापरता search करणे.
+        </div>
+        <p>Computer basically says: <em>"मला कोणता मार्ग योग्य आहे हे आधीपासून माहीत नाही. मी available states तपासत जातो."</em></p>
+
+        <h2>3. BFS — Breadth First Search</h2>
+        <p>Now introduce the full form: <strong>BFS = Breadth First Search</strong></p>
+        
+        <div class="highlight-box">
+            <strong>Simple Definition:</strong> BFS is a search algorithm that explores nodes level by level.
+        </div>
+        
+        <div class="marathi-box">
+            <strong>Marathi:</strong> BFS ही अशी search technique आहे जी tree मधील nodes एक-एक level पूर्ण करून पुढील level वर जाते.
+        </div>
+
+        <h2>4. What is "Level by Level"?</h2>
+        <div class="tree-diagram">                 A
+              /     \
+             B       C
+           /  \     /  \
+          D    E   F    G</div>
+          
+        <p>Now divide it into levels:</p>
+        <div class="code-block">Level 0        A
+Level 1       B C
+Level 2      D E F G</div>
+
+        <p>BFS first visits <code>A</code>, then <code>B C</code>, then <code>D E F G</code>.</p>
+        <p><strong>BFS traversal:</strong> A → B → C → D → E → F → G</p>
+        
+        <div class="marathi-box">
+            <strong>Marathi:</strong> BFS मध्ये आधी Level 0, मग Level 1, मग Level 2 अशा क्रमाने nodes visit केले जातात.
+        </div>
+
+        <h2>5. What is a Node?</h2>
+        <p>A <strong>node</strong> is an individual element/state in the search tree. In our example, A, B, C, D, etc. are nodes.</p>
+        <div class="marathi-box">
+            <strong>Marathi:</strong> Tree मधील प्रत्येक individual element/state ला Node म्हणतात.
+        </div>
+
+        <h2>6. What is a Tree?</h2>
+        <p>A tree is a structure in which nodes are connected in a hierarchical manner.</p>
+        <div class="code-block">A → Parent
+B,C → Children of A
+D,E → Children of B
+F,G → Children of C</div>
+
+        <h2>7. The MOST IMPORTANT Concept — Queue</h2>
+        <p><strong>"BFS uses a Queue."</strong> It uses a <strong>FIFO (First In, First Out)</strong> approach.</p>
+
+        <h2>8. What is a Queue?</h2>
+        <p>Imagine students standing in a queue. Who gets served first? Student A, because A entered first.</p>
+        <div class="highlight-box">
+            <strong>FIFO — First In, First Out</strong>
+        </div>
+        <div class="marathi-box">
+            <strong>Marathi:</strong> Queue म्हणजे रांग. जो student आधी रांगेत आला तो आधी बाहेर/serve होतो. म्हणून FIFO = First In First Out.
+        </div>
+
+        <h2>9. Why Does BFS Use Queue?</h2>
+        <p>Queue processing steps automatically process nodes level by level:</p>
+        <ul>
+            <li>Start: <code>Queue = [A]</code></li>
+            <li>Remove A, Add children: <code>Queue = [B, C]</code></li>
+            <li>Remove B, Add children: <code>Queue = [C, D, E]</code></li>
+            <li>Remove C, Add children: <code>Queue = [D, E, F, G]</code></li>
+        </ul>
+
+        <h2>10. BFS Step-by-Step</h2>
+        <p>Initial State = <strong>A</strong> | Goal = <strong>G</strong></p>
+        <div class="code-block">Step 1: Visit A. Queue = [B, C]
+Step 2: Visit B. Queue = [C, D, E]
+Step 3: Visit C. Queue = [D, E, F, G]
+Step 4: Visit D.
+Step 5: Visit E.
+Step 6: Visit F.
+Step 7: Visit G. (Goal found! STOP)</div>
+        <div class="highlight-box">
+            <strong>Important distinction:</strong><br>
+            Traversal order: A → B → C → D → E → F → G<br>
+            Solution path to G: A → C → G
+        </div>
+
+        <h2>11. BFS Algorithm</h2>
+        <div class="code-block">1. Start with the initial state.
+2. Put the initial state into the queue.
+3. Remove the first state from the queue.
+4. Check whether it is the goal state.
+5. If it is the goal, stop.
+6. Otherwise, generate its successor states.
+7. Add unvisited successors to the queue.
+8. Repeat until the goal is found or queue is empty.</div>
+        
+        <div class="marathi-box">
+            <strong>Marathi:</strong><br>
+            1. Initial state घ्या.<br>
+            2. तो Queue मध्ये टाका.<br>
+            3. Queue मधील पहिला node काढा.<br>
+            4. तो Goal आहे का ते तपासा.<br>
+            5. Goal असेल → Stop.<br>
+            6. Goal नसेल → त्याचे successor states शोधा.<br>
+            7. Unvisited states Queue मध्ये टाका.<br>
+            8. Goal मिळेपर्यंत repeat करा.
+        </div>
+
+        <h2>12. What is a Successor?</h2>
+        <p>States generated from another state by applying an action.</p>
+        <div class="marathi-box">
+            <strong>Marathi:</strong> एखाद्या state वर action केल्यानंतर मिळणाऱ्या पुढील states ना Successor States म्हणतात.
+        </div>
+
+        <h2>13. BFS in One Simple Diagram (Board Layout)</h2>
+        <div class="tree-diagram">              A
+            /   \
+           B     C
+          / \   / \
+         D   E F   G
+                  ↑
+                Goal
+
+Queue Progression:
+[A] → [B,C] → [C,D,E] → [D,E,F,G] → G (Found!)</div>
+
+        <h2>14. Python Connection</h2>
+        <p><code>from collections import deque</code> - Provides a convenient structure for adding/removing elements from both ends.</p>
+        <ul>
+            <li><code>queue = deque()</code> - Create empty queue</li>
+            <li><code>queue.append("A")</code> - Add to rear/end</li>
+            <li><code>queue.popleft()</code> - Remove from front (FIFO)</li>
+        </ul>
+
+        <h2>15 & 16. The Basic BFS Code Explained</h2>
+        <div class="code-block">from collections import deque
+
+graph = {
+    'A': ['B', 'C'], 'B': ['D', 'E'], 'C': ['F', 'G'],
+    'D': [], 'E': [], 'F': [], 'G': []
+}
+
+queue = deque(['A']) # Start BFS from A
+visited = []         # Store visited nodes
+
+while queue:         # Loop while queue is not empty
+    node = queue.popleft() # FIFO behavior
+
+    if node not in visited:
+        visited.append(node)
+        print(node)
+
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                queue.append(neighbour)</div>
+
+        <h2>17. What Students MUST Remember</h2>
+        <ul>
+            <li><strong>Q:</strong> Full form? <strong>A:</strong> Breadth First Search</li>
+            <li><strong>Q:</strong> Works how? <strong>A:</strong> Level by level</li>
+            <li><strong>Q:</strong> Data structure? <strong>A:</strong> Queue</li>
+            <li><strong>Q:</strong> Principle? <strong>A:</strong> FIFO</li>
+        </ul>
+
+        <div class="teaching-plan">
+            <h2>🎯 Teaching Plan for This Topic</h2>
+            <ul>
+                <li><strong>Part 1 (15m):</strong> Search → Blind Search → BFS → Level-by-level</li>
+                <li><strong>Part 2 (15m):</strong> Node, Parent, Child, Level, Successor</li>
+                <li><strong>Part 3 (15m):</strong> Queue, FIFO, append(), popleft()</li>
+                <li><strong>Part 4 (20m):</strong> Manual solving</li>
+                <li><strong>Part 5 (20m):</strong> Python program line by line</li>
+            </ul>
+        </div>
+        
+        <div class="next-step">
+            <h3>⭐ Next Up: The Monkey-Banana Problem</h3>
+            <p>Moving from a generic graph to the actual workbook practical. Teaching from zero: Problem statement → Story → Initial/Goal States → State Space Diagram → BFS Application → Python implementation.</p>
+        </div>
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <h2>Practical 1: Monkey-Banana Problem using Breadth-First Search (BFS)</h2>
+
+        <h3>1. Problem Definition & Physical Setup</h3>
+        <p>A hungry monkey enters a room with high ceilings:</p>
+        <ul>
+            <li><strong>Bananas</strong> hang suspended from the ceiling in the middle of the room, out of the monkey's direct reach.</li>
+            <li>A heavy <strong>Box</strong> is located at another spot in the room (near the window).</li>
+            <li>The monkey can only reach the bananas if it pushes the box directly under the bananas, climbs on top of it, and grabs them.</li>
+        </ul>
+
+        <div class="tree-diagram" style="text-align: left;">[ Position A: Door ]       [ Position C: Middle ]       [ Position B: Window ]
+   (Monkey starts)            (Bananas on ceiling)           (Box starts)</div>
+
+        <h3>2. State-Space Representation (S<sub>0</sub> &rarr; S<sub>4</sub>)</h3>
+        <p>The workbook models this workflow through five sequential discrete states:</p>
+
+        <div class="tree-diagram" style="text-align: left;">  [S0: Initial State]
+    Monkey at Door, Box at Window, Bananas at Ceiling
+           │
+           ▼  Action: Move to Box
+  [S1: At Box]
+    Monkey at Box (Window)
+           │
+           ▼  Action: Push Box
+  [S2: Box Placed]
+    Monkey pushes Box under Banana (Middle)
+           │
+           ▼  Action: Climb Box
+  [S3: On Box]
+    Monkey climbs the Box
+           │
+           ▼  Action: Grab Banana
+  [S4: Goal State]
+    Monkey grabs Banana (Goal Achieved!)</div>
+
+        <h4>Mapping Table: Theoretical States to Program Strings</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>State Identifier</th>
+                    <th>Academic / Theoretical Description</th>
+                    <th>Code String Representation</th>
+                    <th>Action / Operator Taken</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>S<sub>0</sub></strong></td><td>Initial State: Monkey at Door, Box at Window</td><td><code>"Monkey at Door"</code></td><td><code>Move to Box</code></td></tr>
+                <tr><td><strong>S<sub>1</sub></strong></td><td>Monkey reached the Box location</td><td><code>"Monkey at Box"</code></td><td><code>Push Box under Banana</code></td></tr>
+                <tr><td><strong>S<sub>2</sub></strong></td><td>Box positioned beneath the Bananas</td><td><code>"Box Under Banana"</code></td><td><code>Climb Box</code></td></tr>
+                <tr><td><strong>S<sub>3</sub></strong></td><td>Monkey standing atop the Box</td><td><code>"Monkey Climbs Box"</code></td><td><code>Grab Banana</code></td></tr>
+                <tr><td><strong>S<sub>4</sub></strong></td><td>Goal State: Banana securely obtained</td><td><code>"Monkey Gets Banana"</code></td><td><strong>Goal Reached: Stop</strong></td></tr>
+            </tbody>
+        </table>
+
+        <h3>3. Step-by-Step FIFO Queue Trace</h3>
+        <p>BFS drives the search systematically using a queue:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Iteration</th>
+                    <th>Front Element Dequeued (<code>popleft()</code>)</th>
+                    <th>Goal Reached?</th>
+                    <th>Next State Generated</th>
+                    <th>Queue State After Enqueue</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>0</strong></td><td><em>(Start / Setup)</em></td><td>—</td><td>—</td><td><code>['Monkey at Door']</code></td></tr>
+                <tr><td><strong>1</strong></td><td><code>'Monkey at Door'</code></td><td>No</td><td><code>'Monkey at Box'</code></td><td><code>['Monkey at Box']</code></td></tr>
+                <tr><td><strong>2</strong></td><td><code>'Monkey at Box'</code></td><td>No</td><td><code>'Box Under Banana'</code></td><td><code>['Box Under Banana']</code></td></tr>
+                <tr><td><strong>3</strong></td><td><code>'Box Under Banana'</code></td><td>No</td><td><code>'Monkey Climbs Box'</code></td><td><code>['Monkey Climbs Box']</code></td></tr>
+                <tr><td><strong>4</strong></td><td><code>'Monkey Climbs Box'</code></td><td>No</td><td><code>'Monkey Gets Banana'</code></td><td><code>['Monkey Gets Banana']</code></td></tr>
+                <tr><td><strong>5</strong></td><td><code>'Monkey Gets Banana'</code></td><td><strong>YES</strong></td><td>Terminate loop (<code>break</code>)</td><td><code>[]</code></td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Complete Python Implementation</h3>
+        <div class="code-block">from collections import deque
+
+# Step 1: Initialize the FIFO queue with the initial state S0
+queue = deque(["Monkey at Door"])
+
+# Step 2: Track visited states to prevent redundant cycles
+visited = []
+
+# Step 3: Run the BFS loop while the queue has pending states
+while queue:
+    # Remove the front state (FIFO: First-In, First-Out)
+    state = queue.popleft()
+
+    if state not in visited:
+        visited.append(state)
+        print(state)
+
+        # Transition logic based on current state
+        if state == "Monkey at Door":
+            queue.append("Monkey at Box")
+        elif state == "Monkey at Box":
+            queue.append("Box Under Banana")
+        elif state == "Box Under Banana":
+            queue.append("Monkey Climbs Box")
+        elif state == "Monkey Climbs Box":
+            queue.append("Monkey Gets Banana")
+        elif state == "Monkey Gets Banana":
+            print("\nGoal: Banana Obtained!")
+            break</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Monkey at Door
+Monkey at Box
+Box Under Banana
+Monkey Climbs Box
+Monkey Gets Banana
+
+Goal: Banana Obtained!</div>
+
+        <h3>5. Line-by-Line Code Explanation</h3>
+        <ul>
+            <li><strong><code>from collections import deque</code></strong><br>Imports the double-ended queue class from Python's standard library. Unlike standard Python lists which require <em>O(n)</em> time to remove elements from the start, <code>deque</code> executes <code>popleft()</code> in optimal <em>O(1)</em> constant time.</li>
+            <li><strong><code>queue = deque(["Monkey at Door"])</code></strong><br>Initializes the search frontier with the single starting state S<sub>0</sub>.</li>
+            <li><strong><code>visited = []</code></strong><br>An explored list tracking every expanded state, guaranteeing no state is processed multiple times.</li>
+            <li><strong><code>while queue:</code></strong><br>Continues the search frontier exploration as long as elements remain in the queue.</li>
+            <li><strong><code>state = queue.popleft()</code></strong><br>Pulls the oldest element from the front, enforcing strict BFS FIFO ordering.</li>
+            <li><strong><code>if state == "Monkey Gets Banana": ... break</code></strong><br>Validates whether the extracted state satisfies the goal condition. If true, prints the success message and terminates the algorithm.</li>
+        </ul>
+
+        <div class="assignment-box">
+            <h3>6. Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement Breadth-First Search (BFS) for the Monkey-Banana Problem.</li>
+                <li><strong>Initial State (S<sub>0</sub>):</strong> Monkey at Door, Box at Window, Banana hanging from Ceiling.</li>
+                <li><strong>Goal State (S<sub>4</sub>):</strong> Monkey atop the Box, holding the Banana (<code>Banana Obtained</code>).</li>
+                <li><strong>Data Structure Used:</strong> Queue (<code>collections.deque</code>), following FIFO (First-In, First-Out).</li>
+                <li><strong>State Progression:</strong><br>S<sub>0</sub> &rarr; S<sub>1</sub> &rarr; S<sub>2</sub> &rarr; S<sub>3</sub> &rarr; S<sub>4</sub></li>
+            </ul>
+            
+            <h4>Algorithm:</h4>
+            <ol>
+                <li>Enqueue the initial state S<sub>0</sub>.</li>
+                <li>While queue is not empty, dequeue current state <em>S</em>.</li>
+                <li>If <em>S</em> is unvisited, mark <em>S</em> as visited.</li>
+                <li>If <em>S</em> is the goal state, output confirmation and terminate.</li>
+                <li>Otherwise, determine successor state <em>S<sub>next</sub></em>, enqueue <em>S<sub>next</sub></em>, and repeat.</li>
+            </ol>
+        </div>
+
+        <div class="highlight-box">
+            <h3>7. Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>What type of search algorithm is BFS?</strong><br><em>Answer:</em> It is an Uninformed (Blind) Search algorithm because it traverses the state space without using any heuristic or cost-to-goal estimation.</li>
+                <li><strong>Why does BFS require a Queue instead of a Stack?</strong><br><em>Answer:</em> A Queue strictly enforces FIFO (First-In, First-Out), ensuring nodes are expanded level-by-level (shallowest nodes first). A Stack implements LIFO, which turns the search into DFS (Depth-First Search).</li>
+                <li><strong>What is the state transition sequence in the Monkey-Banana problem?</strong><br><em>Answer:</em> S<sub>0</sub> (At Door) &rarr; S<sub>1</sub> (At Box) &rarr; S<sub>2</sub> (Box Under Banana) &rarr; S<sub>3</sub> (Climb Box) &rarr; S<sub>4</sub> (Grab Banana).</li>
+                <li><strong>What is the time and space complexity of BFS?</strong><br><em>Answer:</em> Both time complexity and space complexity are <em>O(b<sup>d</sup>)</em>, where <em>b</em> is the branching factor and <em>d</em> is the depth of the shallowest goal.</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
