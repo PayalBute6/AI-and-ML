@@ -21,14 +21,14 @@
     <h2>1. BFS — Monkey Banana</h2>
     <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) for the Monkey Banana Problem.</p>
 <pre><code>
-from collections import deque # BFS sathi Queue (deque) vapartoy
+from collections import deque # Using Queue (deque) for BFS
 
-# Starting state queue madhe taka (Put start state in queue)
+# Put start state in queue
 queue = deque([&quot;Monkey at Door&quot;])
-visited = set() # Infinite loop avoid karnyasaathi visited set
+visited = set() # Visited set to avoid infinite loops
 
-while queue: # Jo paryant queue empty hot nahi
-    state = queue.popleft() # Queue madhun pahila element kadha
+while queue: # While queue is not empty
+    state = queue.popleft() # Remove first element from queue
 
     if state in visited:
         continue # Jar aadhi visit jhala asel tar skip kara
@@ -532,27 +532,27 @@ def is_safe(node, c):
     # Check kara ki ya node chya shejaryanna same color ahe ka? (Check neighbors)
     for neighbour in graph[node]:
         if neighbour in color and color[neighbour] == c:
-            return False # Same color ahe, tar False return kara
-    return True # Safe ahe!
+            return False # If same color, return False
+    return True # It's safe!
 
 def solve(node):
-    # Base case: saglyanna color karun jhala ki (Total 5 nodes)
+    # Base case: All nodes colored (Total 5 nodes)
     if node &gt; 5:
         return True
 
-    # Pratek color try kara
+    # Try every color
     for c in colors:
-        if is_safe(node, c): # Jar color dena safe asel
-            color[node] = c # Color assign kara
+        if is_safe(node, c): # If it is safe to assign color
+            color[node] = c # Assign color
 
-            # Pudhchya node kade ja (Recursion)
+            # Move to next node (Recursion)
             if solve(node + 1):
                 return True
 
-            # Jar pudhe problem aala tar he color kadhun taka (Backtracking!)
+            # Remove color if problem arises (Backtracking!)
             del color[node]
 
-    return False # Ek hi color chalat nahi, maage ja (Backtrack)
+    return False # Backtrack
 
 if solve(1): # Start from node 1
     print(&quot;Map Coloring Solution:&quot;)
@@ -579,34 +579,34 @@ Node 5 = Brown</code></pre>
 <pre><code>
 import heapq
 
-goal = (1, 2, 3, 0) # Final goal state (0 mhanje empty space)
+goal = (1, 2, 3, 0) # Final goal state (0 represents empty space)
 
 def heuristic(state):
-    # Manhattan distance calculate karnyasaathi
+    # To calculate Manhattan distance
     distance = 0
     for i in range(4):
-        if state[i] != 0: # Empty space la ignore kara
-            goal_pos = goal.index(state[i]) # Target madhe ya number chi position kuthli ahe?
-            # x ani y coordinate madhla difference (Row and Column distance)
+        if state[i] != 0: # Ignore empty space
+            goal_pos = goal.index(state[i]) # Find position in target
+            # Row and Column distance
             distance += abs(i//2 - goal_pos//2)
             distance += abs(i%2 - goal_pos%2)
     return distance
 
 def neighbours(state):
     result = []
-    zero = state.index(0) # 0 chi position shodha
-    row, col = zero // 2, zero % 2 # Row ani Column madhe convert kara
+    zero = state.index(0) # Find position of 0
+    row, col = zero // 2, zero % 2 # Convert to Row and Column
 
     moves = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Up, Down, Left, Right
 
     for dr, dc in moves:
         nr, nc = row + dr, col + dc
-        if 0 &lt;= nr &lt; 2 and 0 &lt;= nc &lt; 2: # Navin position grid chya aat ahe ka check kara
-            new_zero = nr * 2 + nc # Navin 1D index
+        if 0 &lt;= nr &lt; 2 and 0 &lt;= nc &lt; 2: # Check if new position is within grid
+            new_zero = nr * 2 + nc # New 1D index
             new_state = list(state)
-            # 0 ani number chya positions swap kara
+            # Swap positions of 0 and number
             new_state[zero], new_state[new_zero] = new_state[new_zero], new_state[zero]
-            result.append(tuple(new_state)) # Valid neighbor state add kara
+            result.append(tuple(new_state)) # Add valid neighbor state
     return result
 
 def astar(start):
@@ -615,19 +615,19 @@ def astar(start):
     visited = set()
 
     while queue:
-        f, g, state, path = heapq.heappop(queue) # Lowest f value baher kadha
+        f, g, state, path = heapq.heappop(queue) # Pop lowest f value
 
         if state in visited: continue
         visited.add(state)
 
-        if state == goal: # Goal reach jhala!
+        if state == goal: # Goal reached!
             print(&quot;Solution:&quot;)
             for step in path: print(step)
             return
 
-        # Neighbors generate kara ani queue madhe push kara
+        # Generate neighbors and push to queue
         for next_state in neighbours(state):
-            new_g = g + 1 # Ek step pudhe gela
+            new_g = g + 1 # Move one step forward
             new_f = new_g + heuristic(next_state) # f = g + h
             heapq.heappush(queue, (new_f, new_g, next_state, path + [next_state]))
 
@@ -652,18 +652,18 @@ tree = {
 }
 
 def minimax(node, maximizing):
-    # Base case: Jar current node leaf asel tar direct integer value return kara
+    # Base case: If current node is leaf, return integer value directly
     if isinstance(tree[node], int):
         return tree[node]
         
-    # Recursively mulanchi values kadha (Get values of children)
+    # Recursively get values of children
     values = [minimax(child, not maximizing) for child in tree[node]]
     
-    # MAX player la sarvat mothi value havi, MIN la sarvat lahan
+    # MAX player wants highest value, MIN wants lowest
     return max(values) if maximizing else min(values)
 
 def alpha_beta(node, alpha, beta, maximizing):
-    # Base case: Leaf node chi value return kara
+    # Base case: Return value of Leaf node
     if isinstance(tree[node], int):
         return tree[node]
 
@@ -672,14 +672,14 @@ def alpha_beta(node, alpha, beta, maximizing):
         for child in tree[node]:
             value = max(value, alpha_beta(child, alpha, beta, False))
             alpha = max(alpha, value)
-            if alpha &gt;= beta: break # Pruning (Branch ignore kara)
+            if alpha &gt;= beta: break # Pruning (Ignore branch)
         return value
     else: # MIN player
         value = math.inf
         for child in tree[node]:
             value = min(value, alpha_beta(child, alpha, beta, True))
             beta = min(beta, value)
-            if alpha &gt;= beta: break # Pruning (Branch ignore kara)
+            if alpha &gt;= beta: break # Pruning (Ignore branch)
         return value
 
 print(&quot;Minimax:&quot;, minimax(&#x27;A&#x27;, True))
@@ -701,32 +701,32 @@ Alpha-Beta: 3</code></pre>
     <h2>11. Backward Chaining</h2>
     <p><strong>Question:</strong> Write a program to implement the Backward Chaining inference mechanism.</p>
 <pre><code>
-# Base Facts (Mahit aslele satya)
+# Base Facts
 facts = {&quot;rain&quot;}
 
-# Rules (Jar A asel tar B hoil)
+# Rules (If A then B)
 rules = {
-    &quot;wet_ground&quot;: [&quot;rain&quot;],         # Jar rain ahe, tar wet_ground hoil
-    &quot;slippery&quot;: [&quot;wet_ground&quot;],     # Jar wet_ground ahe, tar slippery hoil
-    &quot;dangerous&quot;: [&quot;slippery&quot;]       # Jar slippery ahe, tar dangerous hoil
+    &quot;wet_ground&quot;: [&quot;rain&quot;],         # If rain, then wet_ground
+    &quot;slippery&quot;: [&quot;wet_ground&quot;],     # If wet_ground, then slippery
+    &quot;dangerous&quot;: [&quot;slippery&quot;]       # If slippery, then dangerous
 }
 
 def backward_chaining(goal):
-    # Jar goal directly facts madhe asel tar prove jhala! (Base case)
+    # If goal is directly in facts, it is proven! (Base case)
     if goal in facts:
         return True
         
-    # Jar goal saathi konta rule ch nasel, tar prove nahi hou shakat
+    # If no rule exists for goal, it cannot be proven
     if goal not in rules:
         return False
 
-    # Goal prove karnyasaathi tyachya conditions (e.g. slippery) satisfy hotayet ka te check kara
+    # Check if conditions (e.g., slippery) are satisfied to prove goal
     for condition in rules[goal]:
-        if backward_chaining(condition): # Recursively mage ja
-            facts.add(goal) # Prove jhalyavar tyala fact madhe add kara
+        if backward_chaining(condition): # Go back recursively
+            facts.add(goal) # Add to facts once proven
             return True
 
-    return False # Prove nahi hou shakla
+    return False # Could not be proven
 
 goal = &quot;dangerous&quot;
 if backward_chaining(goal):
@@ -765,18 +765,18 @@ X = [
 Y = [0, 0, 0, 0, 1, 1, 1, 1]
 
 
-# 1. Linear SVM (Straight line draw karun separate karto)
+# 1. Linear SVM (Separates by drawing a straight line)
 linear_model = SVC(kernel=&#x27;linear&#x27;)
-linear_model.fit(X, Y) # Model train kara
+linear_model.fit(X, Y) # Train model
 
-linear_prediction = linear_model.predict(X) # Prediction check kara
+linear_prediction = linear_model.predict(X) # Check prediction
 
 
-# 2. Non-Linear SVM using RBF Kernel (Curved boundary draw karun separate karto)
+# 2. Non-Linear SVM using RBF Kernel (Separates by drawing a curved boundary)
 rbf_model = SVC(kernel=&#x27;rbf&#x27;)
-rbf_model.fit(X, Y) # Model train kara
+rbf_model.fit(X, Y) # Train model
 
-rbf_prediction = rbf_model.predict(X) # Prediction check kara
+rbf_prediction = rbf_model.predict(X) # Check prediction
 
 
 # Display results
@@ -784,7 +784,7 @@ print(&quot;Actual Values:     &quot;, Y)
 print(&quot;Linear SVM:        &quot;, linear_prediction)
 print(&quot;RBF SVM:           &quot;, rbf_prediction)
 
-# Accuracy mhanje kiti percentage answers correct ahet
+# Accuracy means what percentage of answers are correct
 print(&quot;\nLinear SVM Accuracy:&quot;, linear_model.score(X, Y))
 print(&quot;RBF SVM Accuracy:&quot;, rbf_model.score(X, Y))
 </code></pre>
@@ -817,36 +817,36 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import VotingClassifier
 from sklearn.metrics import accuracy_score
 
-# Dataset load kara (Iris dataset of flowers)
+# Load dataset (Iris dataset of flowers)
 data = load_iris()
 X = data.data    # Features
 Y = data.target  # Labels
 
-# Data la Train ani Test madhe divide kara (80% training, 20% testing)
+# Divide data into Train and Test (80% training, 20% testing)
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=42
 )
 
-# Individual models tayar kara
+# Create individual models
 model1 = LogisticRegression(max_iter=200) # Model 1
 model2 = DecisionTreeClassifier(random_state=42) # Model 2
 
-# Voting Classifier (Dohini models cha combination - Majority Vote)
+# Voting Classifier (Combination of both models - Majority Vote)
 voting_model = VotingClassifier(
     estimators=[
         (&#x27;lr&#x27;, model1),
         (&#x27;dt&#x27;, model2)
     ],
-    voting=&#x27;hard&#x27; # Hard voting mhanje direct class votes count karto
+    voting=&#x27;hard&#x27; # Hard voting means counting direct class votes
 )
 
-# Voting Classifier train kara
+# Train Voting Classifier
 voting_model.fit(X_train, Y_train)
 
-# Test data var Prediction kadha
+# Get predictions on test data
 prediction = voting_model.predict(X_test)
 
-# Model chi accuracy check kara (Accuracy Score)
+# Check model accuracy (Accuracy Score)
 accuracy = accuracy_score(Y_test, prediction)
 
 print(&quot;Predicted Values:&quot;, prediction)
@@ -869,7 +869,7 @@ Voting Classifier Accuracy: 1.0</code></pre>
         <img src="dfs_graph_1.png" alt="DFS State Space Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
     </div>
 <pre><code>
-# Graph representation (Kontya node pasun kuthe kuthe jata yeta)
+# Graph representation (Where can we go from which node)
 graph = {
     1: [2, 3],
     2: [1, 4],
@@ -880,26 +880,26 @@ graph = {
 }
 
 def dfs_state_space(graph, start):
-    visited = set() # Visit jhalelya nodes thevnyasathi
-    stack = [start] # DFS sathi Stack vaparat ahet (LIFO - Last In First Out)
+    visited = set() # To keep track of visited nodes
+    stack = [start] # Using Stack for DFS (LIFO - Last In First Out)
     traversal = []  # Final traversal path
     
     print(&quot;Starting DFS State-Space Search...&quot;)
     
-    while stack: # Jo paryant stack empty hot nahi
-        node = stack.pop() # Stack chya top madhun node kadha
+    while stack: # While stack is not empty
+        node = stack.pop() # Pop node from top of stack
         
         if node not in visited:
-            visited.add(node) # Visited mark kara
+            visited.add(node) # Mark as visited
             traversal.append(str(node))
             print(f&quot;Visited: {node}&quot;)
             
-            # Nodes numerical order madhe visit vhave mhanun reverse sort kartoy
-            # (Stack madhe jo shevati add hoto to pahila baher yeto)
+            # Reverse sort to visit nodes in numerical order
+            # (Last added to stack comes out first)
             neighbors = sorted(graph[node], reverse=True)
             for neighbor in neighbors:
                 if neighbor not in visited:
-                    stack.append(neighbor) # Shejaryanna stack madhe push kara
+                    stack.append(neighbor) # Push neighbors to stack
                     
     print(&quot;-&quot; * 30)
     print(&quot;Final DFS Traversal Path:&quot;)
@@ -928,23 +928,23 @@ Final DFS Traversal Path:
 <pre><code>
 # Knowledge Base using Facts and Rules
 
-# Facts (Satya ghoshti - Ex: ha ek pakshi ahe)
+# Facts (Facts - Ex: this is a bird)
 facts = {
     &quot;bird&quot;: True,
     &quot;has_feathers&quot;: True
 }
 
-# Rules (Niyam - Ex: Jar to bird ahe, tar to udu shakto)
+# Rules (Rules - Ex: If it is a bird, then it can fly)
 rules = {
     &quot;bird&quot;: &quot;can_fly&quot;
 }
 
-# Facts print kara
+# Print facts
 print(&quot;Facts in Knowledge Base:&quot;)
 for fact in facts:
     print(&quot;-&quot;, fact)
 
-# Rule apply kara (Forward Chaining)
+# Apply rule (Forward Chaining)
 # Jar &#x27;bird&#x27; he fact ahe, tar rules madhun tyacha conclusion (can_fly) milva
 if &quot;bird&quot; in facts and facts[&quot;bird&quot;] == True:
     conclusion = rules[&quot;bird&quot;]
@@ -972,54 +972,54 @@ The bird can_fly</code></pre>
 <pre><code>
 import heapq
 
-goal = (1, 2, 3, 4, 5, 6, 7, 8, 0) # 0 mhanje blank tile
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0) # 0 represents blank tile
 
 def heuristic(state):
-    # Manhattan Distance formula (h value kadhnyasathi)
+    # Manhattan Distance formula (To calculate h value)
     distance = 0
     for i in range(9):
         value = state[i]
-        if value != 0: # Blank space ignore kara
-            goal_pos = goal.index(value) # Tile chi original final position kay ahe?
-            # Current row/col ani goal row/col madhla difference add kara
+        if value != 0: # Ignore blank space
+            goal_pos = goal.index(value) # What is the original final position of the tile?
+            # Add difference between current and goal row/col
             distance += abs(i // 3 - goal_pos // 3)
             distance += abs(i % 3 - goal_pos % 3)
     return distance
 
 def neighbours(state):
     result = []
-    zero = state.index(0) # 0 (Blank space) kuthya ahe te shodha
-    row, col = zero // 3, zero % 3 # Row ani column madhe convert kara
+    zero = state.index(0) # Find where 0 (Blank space) is
+    row, col = zero // 3, zero % 3 # Convert to row and column
     moves = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Up, Down, Left, Right
 
     for dr, dc in moves:
         nr, nc = row + dr, col + dc
-        if 0 &lt;= nr &lt; 3 and 0 &lt;= nc &lt; 3: # Board chya aat ahe ka check kara
-            new_zero = nr * 3 + nc # 1D array index madhe convert kara
+        if 0 &lt;= nr &lt; 3 and 0 &lt;= nc &lt; 3: # Check if inside the board
+            new_zero = nr * 3 + nc # Convert to 1D array index
             new_state = list(state)
-            # Blank tile ani neighbor tile swap kara
+            # Swap blank tile and neighbor tile
             new_state[zero], new_state[new_zero] = new_state[new_zero], new_state[zero]
             result.append(tuple(new_state)) # Valid neighbor path
 
     return result
 
 def astar(start):
-    # Queue madhe (f, g, state, path) ahe
+    # Queue contains (f, g, state, path)
     queue = [(heuristic(start), 0, start, [start])]
     visited = set()
 
     while queue:
-        f, g, state, path = heapq.heappop(queue) # Lowest f score cha node baher kadha
+        f, g, state, path = heapq.heappop(queue) # Pop node with lowest f score
 
         if state in visited: continue
         visited.add(state)
 
-        if state == goal: # Goal var pohochlyas path print kara
+        if state == goal: # Print path upon reaching goal
             print(&quot;Solution:&quot;)
             for step in path: print(step)
             return
 
-        # Saglya neighbor states queue madhe add kara
+        # Add all neighbor states to queue
         for next_state in neighbours(state):
             new_g = g + 1
             new_f = new_g + heuristic(next_state) # f = g + h
@@ -1047,7 +1047,7 @@ import warnings
 warnings.filterwarnings(&quot;ignore&quot;)
 
 # Using random simulated data as a placeholder for actual images
-# (X_train mhanje image pixels, Y_train mhanje Orange(0) ki Apple(1))
+# (X_train is image pixels, Y_train is Orange(0) or Apple(1))
 import numpy as np
 X_train = np.random.rand(10, 128, 128, 3) # 10 dummy images of size 128x128 with 3 colors (RGB)
 Y_train = np.random.randint(2, size=10) # 10 Labels (0 or 1)
@@ -1056,32 +1056,32 @@ Y_test = np.random.randint(2, size=5)
 
 # CNN Model define kartoy
 model = Sequential([
-    # Step 1: Convolution Layer (Image madhun lines, curves extract karto)
+    # Step 1: Convolution Layer (Extracts lines, curves from Image)
     Conv2D(32, (3, 3), activation=&quot;relu&quot;, input_shape=(128, 128, 3)),
-    # Step 2: Pooling Layer (Image chi size choti karto, pan information same thevto)
+    # Step 2: Pooling Layer (Reduces image size but keeps same information)
     MaxPooling2D(),
     
     # Layer 2 for deep learning
     Conv2D(64, (3, 3), activation=&quot;relu&quot;),
     MaxPooling2D(),
     
-    # Step 3: Flatten (2D matrix la 1D array madhe convert karto, so Dense layer la deta yeil)
+    # Step 3: Flatten (Converts 2D matrix to 1D array so it can be fed to Dense layer)
     Flatten(),
     
     # Step 4: Fully Connected Neural Network
-    Dense(128, activation=&quot;relu&quot;), # 128 neurons chi hidden layer
-    Dense(1, activation=&quot;sigmoid&quot;) # Final output (Sigmoid: 0.5 peksha jast aala tar Apple, nahi tar Orange)
+    Dense(128, activation=&quot;relu&quot;), # Hidden layer with 128 neurons
+    Dense(1, activation=&quot;sigmoid&quot;) # Final output (Sigmoid: > 0.5 is Apple, else Orange)
 ])
 
-# Model compile kara (Loss function ani Optimizer set kara)
+# Compile model (Set loss function and Optimizer)
 model.compile(optimizer=&quot;adam&quot;, loss=&quot;binary_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
 
 print(&quot;Training CNN Model...&quot;)
-# Model train kara (Fit mhanje data var pattern learn kara)
+# Train model (Fit means learn pattern on data)
 model.fit(X_train, Y_train, epochs=2, verbose=1)
 
 print(&quot;\nEvaluating Model...&quot;)
-# Test data var model check kara kiti correct ahe (Accuracy check)
+# Test model on test data to check accuracy
 loss, accuracy = model.evaluate(X_test, Y_test, verbose=0)
 print(&quot;Test Accuracy:&quot;, round(accuracy, 2))
 </code></pre>
