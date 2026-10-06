@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & ML Python Programs Guide - Complete Syllabus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.2;
+            margin: 20px auto;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+        h1, h3, h3, h4 { color: #000; }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            margin-top: 0;
+        }
+        code { font-family: Consolas, monospace; }
+        .explanation { margin-bottom: 40px; }
+        ul { margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <!-- <h3>Textbook Theory: AI & Problem Solving</h3>
+     -->
+    <h3>1. What is Artificial Intelligence?</h3>
+    <p><strong>Definition:</strong> AI is the ability of a machine to perform tasks that normally require human intelligence—such as recognizing patterns, making decisions, and solving problems.</p>
+    
+    <h3>2. The 5 Core Components of a Search Problem</h3>
+    <p>Every search problem in AI breaks down into exactly 5 pieces:</p>
+    <ul>
+        <li><strong>Initial State:</strong> The starting point of the agent.</li>
+        <li><strong>Goal State:</strong> The target state to achieve.</li>
+        <li><strong>State Space:</strong> The set of all valid states reachable from the start.</li>
+        <li><strong>Operators / Actions:</strong> Valid moves that transition the agent between states.</li>
+        <li><strong>Path Cost:</strong> A numeric value reflecting distance, time, or energy spent.</li>
+    </ul>
+
+    <h3>3. Search Terminology</h3>
+    <ul>
+        <li><strong>Node:</strong> An individual element or state in the search tree.</li>
+        <li><strong>Tree:</strong> A structure in which nodes are connected in a hierarchical manner (Parents and Children).</li>
+        <li><strong>Successor:</strong> States generated from another state by applying an action.</li>
+        <li><strong>State Space Representation:</strong> A mathematical or graphical model (using nodes and edges) that represents states and their transitions.</li>
+    </ul>
+
+    <h3>4. Blind / Uninformed Search</h3>
+    <p><strong>Definition:</strong> A search technique that does not use any additional information or "heuristics" about how close a state is to the goal. Imagine trying to find a specific house in a new city without a map or GPS; you just have to check every street systematically.</p>
+    <ul>
+        <li>The algorithm blindly explores available states solely based on the order they are generated.</li>
+        <li>It does not know if a specific move is "good" or "bad", it only knows if it has reached the target or not.</li>
+        <li><strong>Examples:</strong> BFS (Breadth-First Search), DFS (Depth-First Search), DLS (Depth-Limited Search), and IDS (Iterative Deepening Search).</li>
+    </ul>
+
+    <h3>5. The 4 Core Blind Search Algorithms</h3>
+    <p>These are the most important uninformed search strategies. Each explores the State Space differently:</p>
+    <ul>
+        <li><strong>BFS (Breadth-First Search):</strong> 
+            <ul>
+                <li><strong>How it explores:</strong> Level-by-level. It checks all immediate children (neighbors) first before moving deeper into the tree. It searches "wide".</li>
+                <li><strong>Data Structure:</strong> <strong>Queue</strong> (FIFO — First-In, First-Out).</li>
+                <li><strong>Advantage:</strong> Always guaranteed to find the shortest path to the goal.</li>
+            </ul>
+        </li>
+        <li><strong>DFS (Depth-First Search):</strong>
+            <ul>
+                <li><strong>How it explores:</strong> Goes as deep as possible down a single path until it hits a dead end, then backtracks to try the next path. It searches "deep".</li>
+                <li><strong>Data Structure:</strong> <strong>Stack</strong> or Recursion (LIFO — Last-In, First-Out).</li>
+                <li><strong>Advantage:</strong> Requires significantly less memory than BFS because it only needs to store the current single path being explored.</li>
+            </ul>
+        </li>
+        <li><strong>DLS (Depth-Limited Search):</strong>
+            <ul>
+                <li><strong>How it explores:</strong> It is exactly like DFS, but with a strict "Depth Limit". Once it reaches that depth, it forces the algorithm to stop and backtrack, even if it hasn't hit a dead end yet.</li>
+                <li><strong>Data Structure:</strong> <strong>Stack</strong> or Recursion (with a depth counter variable).</li>
+                <li><strong>Advantage:</strong> Solves the biggest problem of DFS by preventing the algorithm from getting stuck forever in an infinite loop or an infinitely deep path.</li>
+            </ul>
+        </li>
+        <li><strong>IDS (Iterative Deepening Search):</strong>
+            <ul>
+                <li><strong>How it explores:</strong> It combines the best of BFS and DFS. It simply runs DLS repeatedly, increasing the allowed Depth Limit by 1 each time (Depth 0, then Depth 1, then Depth 2...) until the goal is found.</li>
+                <li><strong>Data Structure:</strong> <strong>Stack</strong> or Recursion (repeatedly cleared and reused).</li>
+                <li><strong>Advantage:</strong> It gives you the "Shortest Path Guarantee" of BFS while maintaining the "Low Memory Consumption" of DFS. It is the best of both worlds!</li>
+            </ul>
+        </li>
+    </ul>
+    
+    <hr>
+    <!-- <h1>AI & ML Practical Programs Guide</h1> -->
+    
+    <!-- <h3>Table of Contents</h3>
+    <h4>SET A</h4>
+    <ol>
+        <li><a href="#a1">1. Monkey Banana Problem (BFS)</a></li>
+        <li><a href="#a2">2. Water Jug Problem (BFS)</a></li>
+        <li><a href="#a3">3. BFS Traversal for a Graph</a></li>
+        <li><a href="#a4">4. State-Space Search (BFS)</a></li>
+        <li><a href="#a5">5. Depth Limited Search (DLS)</a></li>
+    </ol>
+    <h4>SET B</h4>
+    <ol>
+        <li><a href="#b1">1. DFS Traversal for a Graph</a></li>
+        <li><a href="#b2">2. Missionaries and Cannibals</a></li>
+        <li><a href="#b3">3. Tower of Hanoi (State-Space)</a></li>
+        <li><a href="#b4">4. Iterative Deepening Search (IDS)</a></li>
+        <li><a href="#b5">5. Time and Space Complexity of BFS</a></li>
+    </ol> -->
+
+    <!-- SET A -->
+    <h3>SET A</h3>
+
+    <!-- A1 -->
+    <h3 id="a1">1. Write a program to implement Breadth First Search (BFS) for the Monkey Banana Problem.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>from collections import deque 
+ 
+queue = deque(["Monkey at Door"]) 
+visited = [] 
+
+while queue: 
+    state = queue.popleft() 
+ 
+    if state not in visited: 
+        visited.append(state) 
+        print(state) 
+ 
+        if state == "Monkey at Door": 
+            queue.append("Monkey at Box") 
+        elif state == "Monkey at Box": 
+            queue.append("Box Under Banana") 
+        elif state == "Box Under Banana": 
+            queue.append("Monkey Climbs Box") 
+        elif state == "Monkey Climbs Box": 
+            queue.append("Monkey Gets Banana") 
+        elif state == "Monkey Gets Banana": 
+            print("\nGoal : Banana Obtained!") 
+            break</code></pre>
+
+    <h3>Algorithm Steps:</h3>
+    <ol>
+        <li><strong>Initialize:</strong> Define the starting state (S0: Monkey at Door).</li>
+        <li><strong>Enqueue:</strong> Push the starting state into a FIFO Queue.</li>
+        <li><strong>Loop:</strong> While the queue is not empty, remove (pop) the front state.</li>
+        <li><strong>Goal Check:</strong> If the current state is the Goal (Monkey Gets Banana), stop searching.</li>
+        <li><strong>Expand:</strong> If not the Goal, find the logical Next State (Successor).</li>
+        <li><strong>Repeat:</strong> Push the Next State into the Queue and continue the loop.</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>queue = deque(["Monkey at Door"]):</strong> Sets the initial state.</li>
+            <li><strong>if state == "Monkey at Door": ...</strong> Acts as the Transition Graph defining valid operators for the linear sequential states.</li>
+            <li><strong>break:</strong> Terminates the search immediately once the final state is reached.</li>
+        </ul>
+    </div> -->
+
+    <!-- A2 -->
+    <h3 id="a2">2. Write a program to solve the Water Jug Problem using BFS.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>from collections import deque
+
+def water_jug():
+    visited = set()
+    queue = deque([((0, 0), [(0, 0)])])
+
+    while queue:
+        (x, y), path = queue.popleft()
+
+        if (x, y) in visited: continue
+        visited.add((x, y))
+
+        if x == 2 or y == 2:
+            print("Solution Path:")
+            for state in path: print(state)
+            return
+
+        states = [
+            (4, y), (x, 3), (0, y), (x, 0),
+            (max(0, x - (3 - y)), min(3, x + y)),
+            (min(4, x + y), max(0, y - (4 - x)))
+        ]
+
+        for s in states:
+            if s not in visited:
+                queue.append((s, path + [s]))
+
+water_jug()</code></pre>
+
+    <h3>Algorithm Steps:</h3>
+    <ol>
+        <li><strong>Initialize:</strong> Start with both jugs empty <code>(0, 0)</code> and push this state into a Queue.</li>
+        <li><strong>Loop:</strong> Dequeue the front state. If it's already visited, skip it. Otherwise, mark it visited.</li>
+        <li><strong>Goal Check:</strong> If either jug contains exactly 2 liters, print the path and stop.</li>
+        <li><strong>Expand:</strong> Generate all valid next states by applying the 6 operators (Fill 4L, Fill 3L, Empty 4L, Empty 3L, Pour 4L&rarr;3L, Pour 3L&rarr;4L).</li>
+        <li><strong>Repeat:</strong> Push all unvisited next states into the Queue and repeat.</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>queue = deque([((0, 0), [(0, 0)])]):</strong> Queue tracks the current state (4L jug, 3L jug) and the path taken.</li>
+            <li><strong>if x == 2 or y == 2:</strong> The target is 2 liters in either jug.</li>
+            <li><strong>states = [...]:</strong> Mathematically calculates the next possible states based on the 6 pouring operators.</li>
+        </ul>
+    </div> -->
+
+    <!-- A3 -->
+    <h3 id="a3">3. Write a program to implement BFS traversal for a graph.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>#       A
+#     /   \
+#    B     C
+#   / \   / \
+#  D   E F   G
+
+from collections import deque
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': [],
+    'E': [],
+    'F': [],
+    'G': []
+}
+
+queue = deque(['A'])
+visited = []
+
+while queue:
+    node = queue.popleft()
+
+    if node not in visited:
+        visited.append(node)
+        print(node)
+
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                queue.append(neighbour)</code></pre>
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>queue = deque(['A']):</strong> BFS uses a FIFO (First-In-First-Out) Queue to explore nodes layer by layer.</li>
+            <li><strong>queue.popleft():</strong> Dequeues the front element efficiently.</li>
+            <li><strong>queue.append(neighbour):</strong> Pushes children to the back of the queue, ensuring current layer is completed first.</li>
+        </ul>
+    </div> -->
+
+    <!-- A4 -->
+    <h3 id="a4">4. Write a program to solve a state-space search problem using BFS.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code># State Space Tree:
+#
+#             Start
+#            /     \
+#      State_1     State_2
+#      /     \     /     \
+#  State_3 State_4 State_5 Goal
+#             \
+#             Goal
+
+from collections import deque
+
+state_space = {
+    'Start': ['State_1', 'State_2'],
+    'State_1': ['State_3', 'State_4'],
+    'State_2': ['State_5', 'Goal'],
+    'State_3': [],
+    'State_4': ['Goal'],
+    'State_5': [],
+    'Goal': []
+}
+
+def bfs_search(initial_state, goal_state):
+    visited = set()
+    queue = deque([(initial_state, [initial_state])])
+    
+    while queue:
+        current_state, path = queue.popleft()
+        
+        if current_state in visited: continue
+        visited.add(current_state)
+        
+        if current_state == goal_state:
+            print("Goal Found! Path:", " -> ".join(path))
+            return
+            
+        for next_state in state_space.get(current_state, []):
+            if next_state not in visited:
+                queue.append((next_state, path + [next_state]))
+
+bfs_search('Start', 'Goal')</code></pre>
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>state_space:</strong> A dictionary explicitly mapping states to their logical successors.</li>
+            <li><strong>queue.append((next_state, path + [next_state])):</strong> Maintains the trajectory path alongside the BFS queue.</li>
+        </ul>
+    </div> -->
+
+    <!-- A5 -->
+    <h3 id="a5">5. Write a program to implement Depth Limited Search (DLS).</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code># Graph with Depth Levels:
+#
+# Level 0:        A
+#               /   \
+# Level 1:     B     C
+#             / \     \
+# Level 2:   D   E     F
+#                ↑
+#             Target
+
+def dls(graph, node, target, limit, visited):
+    if node == target:
+        return True
+    
+    if limit <= 0:
+        return False
+        
+    visited.add(node)
+    
+    for neighbour in graph.get(node, []):
+        if neighbour not in visited:
+            if dls(graph, neighbour, target, limit - 1, visited.copy()):
+                return True
+                
+    return False
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+target_node = 'E'
+depth_limit = 2
+
+print(f"Searching for '{target_node}' with depth limit {depth_limit}...")
+if dls(graph, 'A', target_node, depth_limit, set()):
+    print("Target Found within limit!")
+else:
+    print("Target NOT Found within limit.")</code></pre>
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>limit - 1:</strong> The search depth decreases by 1 on every recursive call.</li>
+            <li><strong>if limit <= 0:</strong> The cutoff! Search halts at this layer and backtracks, preventing infinite DFS.</li>
+            <li><strong>visited.copy():</strong> Used so backtracked branches don't share identical visited sets during separate descents.</li>
+        </ul>
+    </div> -->
+
+    <!-- SET B -->
+    <h3>SET B</h3>
+
+    <!-- B1 -->
+    <h3 id="b1">1. Write a program to implement DFS traversal for a graph.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>#      A
+#     / \
+#    B   C
+#   / \   \
+#  D   E   F
+
+def dfs(graph, node, visited):
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)
+
+        for neighbour in graph[node]:
+            dfs(graph, neighbour, visited)
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+visited = set()
+print("DFS Traversal:")
+dfs(graph, 'A', visited)</code></pre>
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>dfs(graph, neighbour, visited):</strong> Recursion relies on the Call Stack, meaning it inherently behaves like Depth-First Search (going deep into child 1 before child 2).</li>
+            <li><strong>print(node):</strong> Done immediately before recursing to correctly log the pre-order traversal sequence.</li>
+        </ul>
+    </div> -->
+
+    <!-- B2 -->
+    <h3 id="b2">2. Write a program to solve the Missionaries and Cannibals Problem.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>from collections import deque
+
+def is_valid(m_left, c_left):
+    m_right, c_right = 3 - m_left, 3 - c_left
+    if m_left > 0 and m_left < c_left: return False
+    if m_right > 0 and m_right < c_right: return False
+    return True
+
+def solve():
+    initial = (3, 3, 0)
+    goal = (0, 0, 1)
+    queue = deque([(initial, [initial])])
+    visited = set()
+    moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+
+    while queue:
+        (m_left, c_left, boat), path = queue.popleft()
+
+        if (m_left, c_left, boat) in visited: continue
+        visited.add((m_left, c_left, boat))
+
+        if (m_left, c_left, boat) == goal:
+            print("Solution:"); 
+            for s in path: print(s)
+            return
+
+        for m, c in moves:
+            if boat == 0:
+                new_m, new_c, new_boat = m_left - m, c_left - c, 1
+            else:
+                new_m, new_c, new_boat = m_left + m, c_left + c, 0
+
+            if 0 <= new_m <= 3 and 0 <= new_c <= 3:
+                if is_valid(new_m, new_c):
+                    new_state = (new_m, new_c, new_boat)
+                    if new_state not in visited:
+                        queue.append((new_state, path + [new_state]))
+solve()</code></pre>
+
+    <h3>Algorithm Steps:</h3>
+    <ol>
+        <li><strong>Initialize:</strong> Start with 3 Missionaries and 3 Cannibals on the left bank <code>(3, 3, 0)</code>. Push to Queue.</li>
+        <li><strong>Loop:</strong> Dequeue the current state and mark it visited.</li>
+        <li><strong>Goal Check:</strong> If all are on the right bank <code>(0, 0, 1)</code>, print the solution path and stop.</li>
+        <li><strong>Generate Moves:</strong> Try all 5 possible boat moves (1M, 2M, 1C, 2C, 1M+1C).</li>
+        <li><strong>Validate:</strong> Ensure the boat move is valid (Cannibals don't outnumber Missionaries on either bank).</li>
+        <li><strong>Repeat:</strong> Push valid, unvisited states to the Queue and continue.</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>is_valid():</strong> Validates the constraints: Cannibals cannot outnumber Missionaries on either riverbank.</li>
+            <li><strong>initial = (3, 3, 0):</strong> Tracks state as (Missionaries Left, Cannibals Left, Boat Side). 0 is left, 1 is right.</li>
+            <li><strong>boat == 0:</strong> Subtraction occurs when moving away from the left bank. Addition occurs when bringing the boat back.</li>
+        </ul>
+    </div> -->
+
+    <!-- B3 -->
+    <h3 id="b3">3. Write a program to solve the Tower of Hanoi Problem using state-space representation.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>from collections import deque
+
+def get_successors(state):
+    successors = []
+    # State represents 3 pegs A, B, C as lists of disk sizes
+    for i in range(3):
+        if not state[i]: continue
+        disk = state[i][-1]
+        
+        for j in range(3):
+            if i == j: continue
+            # Can place if peg is empty or top disk is larger
+            if not state[j] or state[j][-1] > disk:
+                new_state = list(list(peg) for peg in state)
+                new_state[i].pop()
+                new_state[j].append(disk)
+                successors.append(tuple(tuple(peg) for peg in new_state))
+    return successors
+
+def solve_hanoi():
+    initial = ((3, 2, 1), (), ())
+    goal = ((), (), (3, 2, 1))
+    
+    queue = deque([(initial, [initial])])
+    visited = {initial}
+    
+    while queue:
+        state, path = queue.popleft()
+        if state == goal:
+            print(f"Solution Found in {len(path)-1} steps!")
+            for p in path: print(p)
+            return
+            
+        for succ in get_successors(state):
+            if succ not in visited:
+                visited.add(succ)
+                queue.append((succ, path + [succ]))
+
+solve_hanoi()</code></pre>
+
+    <h3>Algorithm Steps:</h3>
+    <ol>
+        <li><strong>Initialize:</strong> Start with all disks on Peg A <code>((3, 2, 1), (), ())</code> and push to Queue.</li>
+        <li><strong>Loop:</strong> Dequeue the front state.</li>
+        <li><strong>Goal Check:</strong> If all disks are on Peg C in order <code>((), (), (3, 2, 1))</code>, print steps and stop.</li>
+        <li><strong>Expand:</strong> For each peg, check if the top disk can be legally moved to another peg (only if the target peg is empty or has a larger top disk).</li>
+        <li><strong>Repeat:</strong> Push all legal new states into the Queue, mark as visited, and repeat.</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>State Space:</strong> Defined as a tuple of 3 tuples <code>((3,2,1), (), ())</code> representing pegs and disks. This solves the problem fundamentally via BFS state-space rather than pure recursion.</li>
+            <li><strong>state[j][-1] > disk:</strong> The physical rule of Tower of Hanoi: a larger disk cannot be placed onto a smaller one.</li>
+            <li><strong>BFS Application:</strong> Finding the exact minimal step sequence by expanding possible valid peg moves layer by layer.</li>
+        </ul>
+    </div> -->
+
+    <!-- B4 -->
+    <h3 id="b4">4. Write a program implement Iterative Deepening Search (IDS).</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>def dls(graph, node, target, limit):
+    if node == target: return True
+    if limit <= 0: return False
+    
+    for neighbour in graph.get(node, []):
+        if dls(graph, neighbour, target, limit - 1):
+            return True
+    return False
+
+def ids(graph, start, target, max_depth):
+    for limit in range(max_depth + 1):
+        print(f"Searching at depth limit {limit}...")
+        if dls(graph, start, target, limit):
+            print(f"Target '{target}' found at depth limit {limit}!")
+            return True
+    print("Target not found.")
+    return False
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+ids(graph, 'A', 'E', 3)</code></pre>
+
+    <h3>Algorithm Steps:</h3>
+    <ol>
+        <li><strong>Initialize:</strong> Start with a Depth Limit of 0.</li>
+        <li><strong>Run DLS:</strong> Perform a Depth-Limited Search (DLS) from the Start Node.</li>
+        <li><strong>Goal Check:</strong> If DLS finds the Target Node within the current limit, stop and return True.</li>
+        <li><strong>Iterate:</strong> If the Target is not found, increase the Depth Limit by 1 (limit = limit + 1).</li>
+        <li><strong>Repeat:</strong> Restart DLS from the beginning with the new, deeper limit. Repeat until the target is found or maximum depth is reached.</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>ids():</strong> Iterative Deepening loops incrementally, increasing the allowed Depth Limit by 1 each iteration.</li>
+            <li><strong>dls():</strong> Re-runs Depth Limited Search entirely for every iterative depth layer. Combines BFS's layer-completeness with DFS's low memory consumption.</li>
+        </ul>
+    </div> -->
+
+    <!-- B5 -->
+    <h3 id="b5">5. Write a program to analyze the time and space complexity of BFS.</h3>
+    <!-- <h3>Code</h3> -->
+    <pre><code>import time
+from collections import deque
+
+def generate_tree(branch_factor, depth):
+    graph = {}
+    nodes = 1
+    def build(node, d):
+        nonlocal nodes
+        graph[node] = []
+        if d < depth:
+            for _ in range(branch_factor):
+                nodes += 1
+                child = f"N{nodes}"
+                graph[node].append(child)
+                build(child, d + 1)
+    build("Root", 0)
+    return graph, nodes
+
+def measure_bfs(graph, start):
+    queue = deque([start])
+    visited = set([start])
+    max_q = 0
+    start_t = time.time()
+    
+    while queue:
+        max_q = max(max_q, len(queue))
+        node = queue.popleft()
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                visited.add(neighbour)
+                queue.append(neighbour)
+                
+    end_t = time.time()
+    return (end_t - start_t), max_q
+
+b, d = 3, 5
+graph, total = generate_tree(b, d)
+time_taken, max_space = measure_bfs(graph, "Root")
+
+print(f"Nodes: {total}")
+print(f"Time (seconds): {time_taken:.5f}")
+print(f"Space (Max Queue Size): {max_space}")</code></pre>
+
+    <h3>Algorithm Steps (Complexity Analysis):</h3>
+    <ol>
+        <li><strong>Setup:</strong> Generate a massive state-space tree with a fixed branching factor (e.g., 3) and depth (e.g., 5).</li>
+        <li><strong>Start Timer:</strong> Record the start time just before BFS begins.</li>
+        <li><strong>Track Space:</strong> During BFS, continuously check the length of the Queue. Record the maximum length reached (This represents Space Complexity).</li>
+        <li><strong>Stop Timer:</strong> Record the end time when BFS completes (This represents Time Complexity).</li>
+        <li><strong>Analyze:</strong> Output the Total Nodes processed, Execution Time (Time Complexity), and Max Queue Size (Space Complexity).</li>
+    </ol>
+
+    <!-- <div class="explanation">
+        <h3>Explanation</h3>
+        <ul>
+            <li><strong>generate_tree():</strong> Programmatically builds a massive graph using <code>b</code> (branch factor) and <code>d</code> (depth) to empirically stress-test the algorithm.</li>
+            <li><strong>time.time():</strong> Measures empirical execution Time Complexity.</li>
+            <li><strong>max(max_q, len(queue)):</strong> Tracks empirical Space Complexity by recording the maximum number of items held in memory at once (the width of the tree's largest level).</li>
+        </ul>
+    </div> -->
+
+</body>
+</html>

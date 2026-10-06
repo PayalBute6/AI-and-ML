@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPPU AI Practicals - 10 Selected Practicals</title>
+    <style>
+        body{
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AI ML Practicals</h1>
+    <!-- <p><strong>Note:</strong> Practical 3 Q2 is Alpha-Beta Pruning. Practical 7 Q2 is Map Coloring. Below are the 10 selected practicals × Q1 + Q2 = 20 programs kept as simple as reasonably possible for teaching.</p> -->
+    <hr>
+
+    <!-- PRACTICAL 1 -->
+        
+    <h2>1. BFS — Monkey Banana</h2>
+    <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) for the Monkey Banana Problem.</p>
+<pre><code>
+from collections import deque # BFS sathi Queue (deque) vapartoy
+
+# Starting state queue madhe taka (Put start state in queue)
+queue = deque([&quot;Monkey at Door&quot;])
+visited = set() # Infinite loop avoid karnyasaathi visited set
+
+while queue: # Jo paryant queue empty hot nahi
+    state = queue.popleft() # Queue madhun pahila element kadha
+
+    if state in visited:
+        continue # Jar aadhi visit jhala asel tar skip kara
+
+    visited.add(state) # Ata ya state la visited mark kara
+    print(state)
+
+    # Next transitions (Pudhche steps)
+    if state == &quot;Monkey at Door&quot;:
+        queue.append(&quot;Monkey at Box&quot;) # Door varun box kade gela
+    elif state == &quot;Monkey at Box&quot;:
+        queue.append(&quot;Box Under Banana&quot;) # Box banana khali sarakvla
+    elif state == &quot;Box Under Banana&quot;:
+        queue.append(&quot;Monkey Climbs Box&quot;) # Box var chadhla
+    elif state == &quot;Monkey Climbs Box&quot;:
+        queue.append(&quot;Monkey Gets Banana&quot;) # Banana milavla
+    elif state == &quot;Monkey Gets Banana&quot;:
+        print(&quot;Goal: Banana Obtained!&quot;) # Goal achieve jhala!
+        break
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Monkey at Door
+Monkey at Box
+Box Under Banana
+Monkey Climbs Box
+Monkey Gets Banana
+Goal: Banana Obtained!</code></pre>
+
+
+    <h2>2. A* Search</h2>
+    <p><strong>Question:</strong> Write a program to implement the A* Search Algorithm to find the shortest path between a source node and a destination node.</p>
+    <!-- <p><em>Teach students:</em> <code>f(n) = g(n) + h(n)</code></p> -->
+    <div style="margin: 15px 0;">
+        <img src="astar_graph.png" alt="A* Search Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+import heapq # A* search sathi Priority Queue (heap) lagto
+
+graph = {
+    &#x27;A&#x27;: {&#x27;B&#x27;: 1, &#x27;C&#x27;: 4}, # A pasun B(cost 1) ani C(cost 4) la jau shakto
+    &#x27;B&#x27;: {&#x27;D&#x27;: 2, &#x27;E&#x27;: 5},
+    &#x27;C&#x27;: {&#x27;F&#x27;: 3},
+    &#x27;D&#x27;: {&#x27;G&#x27;: 3},
+    &#x27;E&#x27;: {&#x27;G&#x27;: 1},
+    &#x27;F&#x27;: {&#x27;G&#x27;: 2},
+    &#x27;G&#x27;: {} # G ha goal ahe, tithun pudhe rasta nahi
+}
+
+# Heuristic values (h) mhanje goal paryant pohochanyacha andaje cost
+h = {
+    &#x27;A&#x27;: 6, &#x27;B&#x27;: 5, &#x27;C&#x27;: 4, &#x27;D&#x27;: 3, &#x27;E&#x27;: 2, &#x27;F&#x27;: 2, &#x27;G&#x27;: 0
+}
+
+def a_star(start, goal):
+    # Queue madhe (f, g, current_node, path_travelled) store kartoy
+    queue = [(h[start], 0, start, [start])]
+    visited = set() # Visited nodes track karnyasaathi
+
+    while queue:
+        # Heappop nehmich sarvat kamin &#x27;f&#x27; value aslela node baher kadhto (Shortest estimated path)
+        f, g, node, path = heapq.heappop(queue)
+
+        if node in visited:
+            continue # Node aadhi visit jhala asel tar skip kara
+        visited.add(node)
+
+        print(&quot;Visiting:&quot;, node)
+
+        if node == goal: # Jar aapan goal var pohochlo
+            print(&quot;\nShortest Path:&quot;, &quot; -&gt; &quot;.join(path))
+            print(&quot;Total Cost:&quot;, g)
+            return
+
+        # Shejari nodes check kara (Check neighbors)
+        for neighbour, cost in graph[node].items():
+            new_g = g + cost # Start pasun neighbour paryantcha actual cost
+            new_f = new_g + h[neighbour] # f = g + h formula!
+
+            # Navin path and cost queue madhe push kara
+            heapq.heappush(queue, (new_f, new_g, neighbour, path + [neighbour]))
+
+a_star(&#x27;A&#x27;, &#x27;G&#x27;)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Path: ['A', 'B', 'D', 'G']
+Cost: 6</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 2 -->
+        
+    <h2>3. Water Jug using BFS</h2>
+    <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) for the Water Jug Problem.</p>
+<pre><code>
+from collections import deque # BFS sathi double ended queue
+
+def water_jug():
+    visited = set() # Visit jhalelya states (x,y) thevnyasathi
+    # Queue madhe ((jug4, jug3), path) store kartoy
+    queue = deque([((0, 0), [(0, 0)])]) 
+
+    while queue:
+        (x, y), path = queue.popleft() # Current state ani path baher kadha
+
+        if (x, y) in visited: continue # Jar state already pahili asel tar skip kara
+        visited.add((x, y)) # State la visited mark kara
+
+        # Goal condition: Kontyahi ek jug madhe 2 Liter pani asayla hava
+        if x == 2 or y == 2:
+            print(&quot;Solution Path:&quot;)
+            for state in path: print(state)
+            return
+
+        # Saglya possible actions apply kara (All possible next states)
+        states = [
+            (4, y), # 4L jug full kara (Fill 4L)
+            (x, 3), # 3L jug full kara (Fill 3L)
+            (0, y), # 4L jug empty kara (Empty 4L)
+            (x, 0), # 3L jug empty kara (Empty 3L)
+            # 3L jug madhun 4L madhe ota, jo paryant to full hot nahi (Pour 3L -&gt; 4L)
+            (max(0, x - (3 - y)), min(3, x + y)),
+            # 4L jug madhun 3L madhe ota, jo paryant to full hot nahi (Pour 4L -&gt; 3L)
+            (min(4, x + y), max(0, y - (4 - x)))
+        ]
+
+        # Navin states queue madhe add kara
+        for s in states:
+            if s not in visited:
+                queue.append((s, path + [s]))
+
+water_jug()
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Solution Path:
+(0, 0)
+(0, 3)
+(3, 0)
+(3, 3)
+(4, 2)</code></pre>
+
+
+    <h2>4. Backtracking — CSP</h2>
+    <p><strong>Question:</strong> Write a program to implement the Backtracking Algorithm for solving a constraint satisfaction problem (Graph Coloring).</p>
+    <div style="margin: 15px 0;">
+        <img src="csp_graph.png" alt="CSP Graph Coloring" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+# Graph: Konta node kontya dusrya node la connected ahe
+graph = {
+    1: [2, 3, 4, 5],
+    2: [1, 3, 4, 5],
+    3: [1, 2, 4, 5],
+    4: [1, 2, 3, 5],
+    5: [1, 2, 3, 4]
+}
+
+nodes = [1, 2, 3, 4, 5] # Nodes to color
+available_colors = [&#x27;Blue&#x27;, &#x27;Green&#x27;, &#x27;Yellow&#x27;, &#x27;Red&#x27;, &#x27;Purple&#x27;] # Available colors
+
+node_colors = {} # Final answers store karnyasaathi (e.g., {1: &#x27;Blue&#x27;})
+
+def solve_csp(node_index):
+    # Base Case: Saglya 5 nodes la color karun jhala ki yashasvi! (Success)
+    if node_index == len(nodes):
+        return True
+        
+    current_node = nodes[node_index] # Current node konta ahe
+    
+    # Ek ek color try kara (Try each color)
+    for color in available_colors:
+        print(f&quot;Thinking: Trying {color} for Node {current_node}...&quot;)
+        
+        # Check kara shejari node la ha same color dila ahe ka? (Check neighbor colors)
+        is_safe = True
+        for neighbor in graph[current_node]:
+            if neighbor in node_colors and node_colors[neighbor] == color:
+                is_safe = False # Conflict! Shejari same color cha ahe
+                print(f&quot;  -&gt; Conflict! Cannot use {color} because neighbor Node {neighbor} is already {color}&quot;)
+                break
+                
+        # Jar color safe asel tar to assign kara
+        if is_safe:
+            node_colors[current_node] = color
+            print(f&quot;  -&gt; Success! Assigned {color} to Node {current_node}&quot;)
+            
+            # Recursively pudhchya node kade ja (Move to NEXT node)
+            if solve_csp(node_index + 1) == True:
+                return True
+                
+            # BACKTRACK: Jar pudhe dead end aala, tar ha color kadhun taka ani dusra try kara
+            print(f&quot;  -&gt; Backtracking: Removing {color} from Node {current_node}&quot;)
+            del node_colors[current_node]
+            
+    # Ek hi color challela nahi, backtrack kara (Return False to backtrack)
+    return False
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;Starting Backtracking Algorithm for CSP...&quot;)
+    print(&quot;-&quot; * 50)
+    
+    if solve_csp(0) == True:
+        print(&quot;-&quot; * 50)
+        print(&quot;Final Solution Found!&quot;)
+        for node in nodes:
+            print(f&quot;Node {node} is colored {node_colors[node]}&quot;)
+    else:
+        print(&quot;\nNo solution possible with the given colors.&quot;)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Starting Backtracking Algorithm for CSP...
+--------------------------------------------------
+Thinking: Trying Blue for Node 1...
+  -> Success! Assigned Blue to Node 1
+Thinking: Trying Blue for Node 2...
+  -> Conflict! Cannot use Blue because neighbor Node 1 is already Blue
+Thinking: Trying Green for Node 2...
+  -> Success! Assigned Green to Node 2
+Thinking: Trying Blue for Node 3...
+  -> Conflict! Cannot use Blue because neighbor Node 1 is already Blue
+Thinking: Trying Green for Node 3...
+  -> Conflict! Cannot use Green because neighbor Node 2 is already Green
+Thinking: Trying Yellow for Node 3...
+  -> Success! Assigned Yellow to Node 3
+Thinking: Trying Blue for Node 4...
+  -> Conflict! Cannot use Blue because neighbor Node 1 is already Blue
+Thinking: Trying Green for Node 4...
+  -> Conflict! Cannot use Green because neighbor Node 2 is already Green
+Thinking: Trying Yellow for Node 4...
+  -> Conflict! Cannot use Yellow because neighbor Node 3 is already Yellow
+Thinking: Trying Red for Node 4...
+  -> Success! Assigned Red to Node 4
+Thinking: Trying Blue for Node 5...
+  -> Conflict! Cannot use Blue because neighbor Node 1 is already Blue
+Thinking: Trying Green for Node 5...
+  -> Conflict! Cannot use Green because neighbor Node 2 is already Green
+Thinking: Trying Yellow for Node 5...
+  -> Conflict! Cannot use Yellow because neighbor Node 3 is already Yellow
+Thinking: Trying Red for Node 5...
+  -> Conflict! Cannot use Red because neighbor Node 4 is already Red
+Thinking: Trying Purple for Node 5...
+  -> Success! Assigned Purple to Node 5
+--------------------------------------------------
+Final Solution Found!
+Node 1 is colored Blue
+Node 2 is colored Green
+Node 3 is colored Yellow
+Node 4 is colored Red
+Node 5 is colored Purple</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 3 -->
+        
+    <h2>5. BFS Traversal for Graph</h2>
+    <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) traversal for a graph.</p>
+    <div style="margin: 15px 0;">
+        <img src="bfs_graph.png" alt="BFS Tree Traversal Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+from collections import deque # Queue sathi deque (Double ended queue)
+
+def bfs_traversal(graph, start_node):
+    queue = deque([start_node]) # Queue madhe root node theva
+    visited = set([start_node]) # Root node la visited mark kara
+    traversal_order = [] # Final answer path store karnyasaathi
+    
+    print(&quot;Starting BFS Traversal...&quot;)
+    
+    while queue: # Jo paryant queue madhe nodes ahet
+        current_node = queue.popleft() # queue chya surwatitun node kadha
+        traversal_order.append(current_node)
+        print(f&quot;\nVisiting Node: {current_node}&quot;)
+        
+        # Current node chya saglya neighbors la check kara
+        for neighbor in graph.get(current_node, []):
+            if neighbor not in visited: # Jar neighbor visit jhala nasel
+                visited.add(neighbor) # Tyala visited madhe taka
+                queue.append(neighbor) # Queue madhe add kara (Next level sathi)
+                print(f&quot;  -&gt; Discovered Node {neighbor}, adding to the queue.&quot;)
+                
+    return traversal_order
+
+# Graph dictionary: node -&gt; [list of connected neighbors]
+graph = {
+    1: [2, 3], 2: [4, 5], 3: [6, 7], 4: [8, 9], 5: [10, 11],
+    6: [12, 13], 7: [14, 15], 8: [], 9: [], 10: [], 11: [],
+    12: [], 13: [], 14: [], 15: []
+}
+
+print(&quot;=&quot; * 50)
+result = bfs_traversal(graph, 1)
+
+print(&quot;=&quot; * 50)
+print(&quot;Final BFS Traversal Order:&quot;)
+print(&quot; -&gt; &quot;.join(map(str, result)))
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>==================================================
+Starting BFS Traversal...
+
+Visiting Node: 1
+  -> Discovered Node 2, adding to the queue.
+  -> Discovered Node 3, adding to the queue.
+
+Visiting Node: 2
+  -> Discovered Node 4, adding to the queue.
+  -> Discovered Node 5, adding to the queue.
+
+Visiting Node: 3
+  -> Discovered Node 6, adding to the queue.
+  -> Discovered Node 7, adding to the queue.
+
+Visiting Node: 4
+  -> Discovered Node 8, adding to the queue.
+  -> Discovered Node 9, adding to the queue.
+
+Visiting Node: 5
+  -> Discovered Node 10, adding to the queue.
+  -> Discovered Node 11, adding to the queue.
+
+Visiting Node: 6
+  -> Discovered Node 12, adding to the queue.
+  -> Discovered Node 13, adding to the queue.
+
+Visiting Node: 7
+  -> Discovered Node 14, adding to the queue.
+  -> Discovered Node 15, adding to the queue.
+
+Visiting Node: 8
+Visiting Node: 9
+Visiting Node: 10
+Visiting Node: 11
+Visiting Node: 12
+Visiting Node: 13
+Visiting Node: 14
+Visiting Node: 15
+==================================================
+Final BFS Traversal Order:
+1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 13 -> 14 -> 15</code></pre>
+
+
+    <h2>6. Alpha-Beta Pruning</h2>
+    <p><strong>Question:</strong> Write a program to implement Alpha-Beta Pruning for optimizing the Minimax search process.</p>
+    <div style="margin: 15px 0;">
+        <img src="alphabeta_graph.png" alt="Alpha Beta Pruning Tree" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+import math
+
+# node: current game node
+# depth: kiti khali jaycha ahe
+# alpha: MAX player chi best garantee value
+# beta: MIN player chi best garantee value
+# maximizing: True asel tar MAX player, False asel tar MIN player
+def alpha_beta(node, depth, alpha, beta, maximizing):
+
+    # Leaf node la aalo ki tyachi value return kara (Base case)
+    if depth == 0:
+        return node
+
+    if maximizing: # MAX Player chi turn
+        best = -math.inf # Surwatila best -infinity theva
+
+        for child in node:
+            # Child nodes chi value kadha
+            value = alpha_beta(child, depth - 1, alpha, beta, False)
+            best = max(best, value) # MAX la sarvat mothi value havi ahe
+            alpha = max(alpha, best) # Alpha update kara
+
+            # Pruning condition (Pudhche branch cut kara)
+            if alpha &gt;= beta:
+                break # Beta (MIN) ya peksha lahan value fix keli ahe, so ignore branch!
+
+        return best
+
+    else: # MIN Player chi turn
+        best = math.inf # Surwatila best +infinity theva
+
+        for child in node:
+            # Child nodes chi value kadha
+            value = alpha_beta(child, depth - 1, alpha, beta, True)
+            best = min(best, value) # MIN la sarvat lahan value havi ahe
+            beta = min(beta, best) # Beta update kara
+
+            # Pruning condition (Pudhche branch cut kara)
+            if alpha &gt;= beta:
+                break # Alpha (MAX) ne already mothi value guarantee keli ahe!
+
+        return best
+
+
+# Game tree structure (Leaf values)
+tree = [
+    [3, 5],
+    [2, 9],
+    [0, 7]
+]
+
+# Surwatila Root MAX player ahe
+result = alpha_beta(tree, 2, -math.inf, math.inf, True)
+
+print(&quot;Best value:&quot;, result)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Best value: 3</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 7 -->
+        
+    <h2>7. A* Search — V1 to V6</h2>
+    <p><strong>Question:</strong> Write a program to implement the A* Search Algorithm to find the shortest path between a source node (V1) and a destination node (V6).</p>
+    <div style="margin: 15px 0;">
+        <img src="astar_v1_v6.png" alt="A* V1 to V6 Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+import heapq # Priority queue saathi heapq
+
+graph = {
+    &#x27;V1&#x27;: {&#x27;V2&#x27;: 2, &#x27;V3&#x27;: 4}, # V1 pasun V2(2) ani V3(4) cost ne jau shakto
+    &#x27;V2&#x27;: {&#x27;V1&#x27;: 2, &#x27;V4&#x27;: 3},
+    &#x27;V3&#x27;: {&#x27;V1&#x27;: 4, &#x27;V4&#x27;: 1, &#x27;V5&#x27;: 5},
+    &#x27;V4&#x27;: {&#x27;V2&#x27;: 3, &#x27;V3&#x27;: 1, &#x27;V6&#x27;: 2},
+    &#x27;V5&#x27;: {&#x27;V3&#x27;: 5, &#x27;V6&#x27;: 1},
+    &#x27;V6&#x27;: {&#x27;V4&#x27;: 2, &#x27;V5&#x27;: 1}
+}
+
+# Heuristic values (h): V6 kade pohochaycha andaje cost (Estimated cost to goal V6)
+heuristic = {
+    &#x27;V1&#x27;: 7, &#x27;V2&#x27;: 5, &#x27;V3&#x27;: 3, &#x27;V4&#x27;: 2, &#x27;V5&#x27;: 1, &#x27;V6&#x27;: 0
+}
+
+def astar(start, goal):
+    # Queue madhe (f, g, current_node, path) ahe. Survatila f = h[start], g = 0
+    queue = [(heuristic[start], 0, start, [start])]
+    visited = set()
+
+    while queue:
+        # Lowest &#x27;f&#x27; value aslela path baher kadha
+        f, g, node, path = heapq.heappop(queue)
+
+        if node in visited:
+            continue # Node already explore jhala asel tar skip kara
+        visited.add(node)
+
+        print(f&quot;Visiting {node} (Cost so far: {g})&quot;)
+
+        # Goal var pohochlo tar path print kara
+        if node == goal:
+            print(&quot;-&quot; * 20)
+            print(&quot;Path:&quot;, &quot; -&gt; &quot;.join(path))
+            print(&quot;Total Cost:&quot;, g)
+            return
+
+        # Neighbours kade ja (Check all neighbors)
+        for neighbour, cost in graph[node].items():
+            if neighbour not in visited:
+                new_g = g + cost # Start pasun navin node paryantcha cost
+                new_f = new_g + heuristic[neighbour] # f = g + h formula
+                
+                # Navin details queue madhe push kara
+                heapq.heappush(queue, (new_f, new_g, neighbour, path + [neighbour]))
+
+print(&quot;Starting A* Search...&quot;)
+astar(&#x27;V1&#x27;, &#x27;V6&#x27;)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Starting A* Search...
+Visiting V1 (Cost so far: 0)
+Visiting V2 (Cost so far: 2)
+Visiting V3 (Cost so far: 4)
+Visiting V4 (Cost so far: 5)
+Visiting V6 (Cost so far: 7)
+--------------------
+Path: V1 -> V2 -> V4 -> V6
+Total Cost: 7</code></pre>
+
+
+    <h2>8. Map Coloring using CSP</h2>
+    <p><strong>Question:</strong> Write a program to solve the Map Coloring Problem using the Constraint Satisfaction Problem (CSP) approach.</p>
+    <div style="margin: 15px 0;">
+        <img src="map_coloring_pentagon.png" alt="Pentagon Map Coloring" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+# Graph: Konte regions (nodes) ekmekanna touch kartat
+graph = {
+    1: [2, 5],
+    2: [1, 3],
+    3: [2, 4],
+    4: [3, 5],
+    5: [4, 1]
+}
+
+colors = [&quot;Pink&quot;, &quot;Brown&quot;, &quot;Orange&quot;] # Available colors
+color = {} # Result store karnyasaathi {node: assigned_color}
+
+def is_safe(node, c):
+    # Check kara ki ya node chya shejaryanna same color ahe ka? (Check neighbors)
+    for neighbour in graph[node]:
+        if neighbour in color and color[neighbour] == c:
+            return False # Same color ahe, tar False return kara
+    return True # Safe ahe!
+
+def solve(node):
+    # Base case: saglyanna color karun jhala ki (Total 5 nodes)
+    if node &gt; 5:
+        return True
+
+    # Pratek color try kara
+    for c in colors:
+        if is_safe(node, c): # Jar color dena safe asel
+            color[node] = c # Color assign kara
+
+            # Pudhchya node kade ja (Recursion)
+            if solve(node + 1):
+                return True
+
+            # Jar pudhe problem aala tar he color kadhun taka (Backtracking!)
+            del color[node]
+
+    return False # Ek hi color chalat nahi, maage ja (Backtrack)
+
+if solve(1): # Start from node 1
+    print(&quot;Map Coloring Solution:&quot;)
+    for node in color:
+        print(&quot;Node&quot;, node, &quot;=&quot;, color[node])
+else:
+    print(&quot;No solution&quot;)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Map Coloring Solution:
+Node 1 = Pink
+Node 2 = Brown
+Node 3 = Pink
+Node 4 = Brown
+Node 5 = Brown</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 8 -->
+        
+    <h2>9. 4-Puzzle using A*</h2>
+    <p><strong>Question:</strong> Write a program to solve the 4-Puzzle problem using the A* Search Algorithm.</p>
+<pre><code>
+import heapq
+
+goal = (1, 2, 3, 0) # Final goal state (0 mhanje empty space)
+
+def heuristic(state):
+    # Manhattan distance calculate karnyasaathi
+    distance = 0
+    for i in range(4):
+        if state[i] != 0: # Empty space la ignore kara
+            goal_pos = goal.index(state[i]) # Target madhe ya number chi position kuthli ahe?
+            # x ani y coordinate madhla difference (Row and Column distance)
+            distance += abs(i//2 - goal_pos//2)
+            distance += abs(i%2 - goal_pos%2)
+    return distance
+
+def neighbours(state):
+    result = []
+    zero = state.index(0) # 0 chi position shodha
+    row, col = zero // 2, zero % 2 # Row ani Column madhe convert kara
+
+    moves = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Up, Down, Left, Right
+
+    for dr, dc in moves:
+        nr, nc = row + dr, col + dc
+        if 0 &lt;= nr &lt; 2 and 0 &lt;= nc &lt; 2: # Navin position grid chya aat ahe ka check kara
+            new_zero = nr * 2 + nc # Navin 1D index
+            new_state = list(state)
+            # 0 ani number chya positions swap kara
+            new_state[zero], new_state[new_zero] = new_state[new_zero], new_state[zero]
+            result.append(tuple(new_state)) # Valid neighbor state add kara
+    return result
+
+def astar(start):
+    # Queue: (f_score, g_score, current_state, path)
+    queue = [(heuristic(start), 0, start, [start])]
+    visited = set()
+
+    while queue:
+        f, g, state, path = heapq.heappop(queue) # Lowest f value baher kadha
+
+        if state in visited: continue
+        visited.add(state)
+
+        if state == goal: # Goal reach jhala!
+            print(&quot;Solution:&quot;)
+            for step in path: print(step)
+            return
+
+        # Neighbors generate kara ani queue madhe push kara
+        for next_state in neighbours(state):
+            new_g = g + 1 # Ek step pudhe gela
+            new_f = new_g + heuristic(next_state) # f = g + h
+            heapq.heappush(queue, (new_f, new_g, next_state, path + [next_state]))
+
+astar((1, 2, 0, 3)) # Start the puzzle
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Solution:
+(1, 2, 0, 3)
+(1, 2, 3, 0)</code></pre>
+
+
+    <h2>10. Minimax vs Alpha-Beta</h2>
+    <p><strong>Question:</strong>Write a program or report that compares Minimax and Alpha-Beta 
+Pruning on the same game tree. </p>
+<pre><code>
+import math
+
+# Game tree structure
+tree = {
+    &#x27;A&#x27;: [&#x27;B&#x27;, &#x27;C&#x27;], &#x27;B&#x27;: [&#x27;D&#x27;, &#x27;E&#x27;], &#x27;C&#x27;: [&#x27;F&#x27;, &#x27;G&#x27;],
+    &#x27;D&#x27;: 3, &#x27;E&#x27;: 5, &#x27;F&#x27;: 2, &#x27;G&#x27;: 9
+}
+
+def minimax(node, maximizing):
+    # Base case: Jar current node leaf asel tar direct integer value return kara
+    if isinstance(tree[node], int):
+        return tree[node]
+        
+    # Recursively mulanchi values kadha (Get values of children)
+    values = [minimax(child, not maximizing) for child in tree[node]]
+    
+    # MAX player la sarvat mothi value havi, MIN la sarvat lahan
+    return max(values) if maximizing else min(values)
+
+def alpha_beta(node, alpha, beta, maximizing):
+    # Base case: Leaf node chi value return kara
+    if isinstance(tree[node], int):
+        return tree[node]
+
+    if maximizing: # MAX player
+        value = -math.inf
+        for child in tree[node]:
+            value = max(value, alpha_beta(child, alpha, beta, False))
+            alpha = max(alpha, value)
+            if alpha &gt;= beta: break # Pruning (Branch ignore kara)
+        return value
+    else: # MIN player
+        value = math.inf
+        for child in tree[node]:
+            value = min(value, alpha_beta(child, alpha, beta, True))
+            beta = min(beta, value)
+            if alpha &gt;= beta: break # Pruning (Branch ignore kara)
+        return value
+
+print(&quot;Minimax:&quot;, minimax(&#x27;A&#x27;, True))
+print(&quot;Alpha-Beta:&quot;, alpha_beta(&#x27;A&#x27;, -math.inf, math.inf, True))
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Minimax: 3
+Alpha-Beta: 3</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 11 -->
+        
+    <!-- <h2>Q1. Minimax and Alpha-Beta</h2>
+    <p><strong>Question:</strong> Write a program to implement and compare Minimax Search and Alpha-Beta Pruning.</p>
+    <p><em>(Same output and logic as Practical 8 Q2)</em></p> -->
+
+    <h2>11. Backward Chaining</h2>
+    <p><strong>Question:</strong> Write a program to implement the Backward Chaining inference mechanism.</p>
+<pre><code>
+# Base Facts (Mahit aslele satya)
+facts = {&quot;rain&quot;}
+
+# Rules (Jar A asel tar B hoil)
+rules = {
+    &quot;wet_ground&quot;: [&quot;rain&quot;],         # Jar rain ahe, tar wet_ground hoil
+    &quot;slippery&quot;: [&quot;wet_ground&quot;],     # Jar wet_ground ahe, tar slippery hoil
+    &quot;dangerous&quot;: [&quot;slippery&quot;]       # Jar slippery ahe, tar dangerous hoil
+}
+
+def backward_chaining(goal):
+    # Jar goal directly facts madhe asel tar prove jhala! (Base case)
+    if goal in facts:
+        return True
+        
+    # Jar goal saathi konta rule ch nasel, tar prove nahi hou shakat
+    if goal not in rules:
+        return False
+
+    # Goal prove karnyasaathi tyachya conditions (e.g. slippery) satisfy hotayet ka te check kara
+    for condition in rules[goal]:
+        if backward_chaining(condition): # Recursively mage ja
+            facts.add(goal) # Prove jhalyavar tyala fact madhe add kara
+            return True
+
+    return False # Prove nahi hou shakla
+
+goal = &quot;dangerous&quot;
+if backward_chaining(goal):
+    print(&quot;Goal proved:&quot;, goal)
+else:
+    print(&quot;Goal cannot be proved&quot;)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Goal proved: dangerous</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 12 -->
+        
+    <!-- <h2>Q1. BFS — Monkey Banana</h2>
+    <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) for the Monkey Banana Problem.</p>
+    <p><em>(Same output and logic as Practical 1 Q1)</em></p> -->
+
+    <h2>12. Linear SVM vs RBF SVM</h2>
+    <p><strong>Question:</strong> Write a program or report to compare Linear SVM and Non-Linear SVM 
+(RBF Kernel). 
+X = [ [1, 2], [2, 3], [3, 1], [4, 2], [5, 5], [6, 6], [7, 4], [8, 5] ]  
+Y = [0, 0, 0, 0, 1, 1, 1, 1] </p>
+    <p><strong>Note:</strong> You must install <code>scikit-learn</code> to run this code. Run: <code>pip install scikit-learn</code> in your terminal.</p>
+<pre><code>
+from sklearn.svm import SVC
+
+# Training data (Features / X values)
+X = [
+    [1, 2], [2, 3], [3, 1], [4, 2], # Group 0 (Category 0)
+    [5, 5], [6, 6], [7, 4], [8, 5]  # Group 1 (Category 1)
+]
+
+# Labels (Answers / Y values)
+Y = [0, 0, 0, 0, 1, 1, 1, 1]
+
+
+# 1. Linear SVM (Straight line draw karun separate karto)
+linear_model = SVC(kernel=&#x27;linear&#x27;)
+linear_model.fit(X, Y) # Model train kara
+
+linear_prediction = linear_model.predict(X) # Prediction check kara
+
+
+# 2. Non-Linear SVM using RBF Kernel (Curved boundary draw karun separate karto)
+rbf_model = SVC(kernel=&#x27;rbf&#x27;)
+rbf_model.fit(X, Y) # Model train kara
+
+rbf_prediction = rbf_model.predict(X) # Prediction check kara
+
+
+# Display results
+print(&quot;Actual Values:     &quot;, Y)
+print(&quot;Linear SVM:        &quot;, linear_prediction)
+print(&quot;RBF SVM:           &quot;, rbf_prediction)
+
+# Accuracy mhanje kiti percentage answers correct ahet
+print(&quot;\nLinear SVM Accuracy:&quot;, linear_model.score(X, Y))
+print(&quot;RBF SVM Accuracy:&quot;, rbf_model.score(X, Y))
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Actual Values:      [0, 0, 0, 0, 1, 1, 1, 1]
+Linear SVM:         [0, 0, 0, 0, 1, 1, 1, 1]
+RBF SVM:            [0, 0, 0, 0, 1, 1, 1, 1]
+
+Linear SVM Accuracy: 1.0
+RBF SVM Accuracy: 1.0</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 13 -->
+        
+    <!-- <h2>Q1. Water Jug using BFS</h2>
+    <p><strong>Question:</strong> Write a program to implement Breadth First Search (BFS) for the Water Jug Problem.</p>
+    <p><em>(Same output and logic as Practical 2 Q1)</em></p> -->
+
+    <h2>13. Voting Classifier</h2>
+    <p><strong>Question:</strong> Write a program to implement a Voting Classifier by combining multiple 
+machine learning models such as Logistic Regression and Decision Tree.</p>
+    <p><strong>Note:</strong> You must install <code>scikit-learn</code> to run this code. Run: <code>pip install scikit-learn</code> in your terminal.</p>
+<pre><code>
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import VotingClassifier
+from sklearn.metrics import accuracy_score
+
+# Dataset load kara (Iris dataset of flowers)
+data = load_iris()
+X = data.data    # Features
+Y = data.target  # Labels
+
+# Data la Train ani Test madhe divide kara (80% training, 20% testing)
+X_train, X_test, Y_train, Y_test = train_test_split(
+    X, Y, test_size=0.2, random_state=42
+)
+
+# Individual models tayar kara
+model1 = LogisticRegression(max_iter=200) # Model 1
+model2 = DecisionTreeClassifier(random_state=42) # Model 2
+
+# Voting Classifier (Dohini models cha combination - Majority Vote)
+voting_model = VotingClassifier(
+    estimators=[
+        (&#x27;lr&#x27;, model1),
+        (&#x27;dt&#x27;, model2)
+    ],
+    voting=&#x27;hard&#x27; # Hard voting mhanje direct class votes count karto
+)
+
+# Voting Classifier train kara
+voting_model.fit(X_train, Y_train)
+
+# Test data var Prediction kadha
+prediction = voting_model.predict(X_test)
+
+# Model chi accuracy check kara (Accuracy Score)
+accuracy = accuracy_score(Y_test, prediction)
+
+print(&quot;Predicted Values:&quot;, prediction)
+print(&quot;Actual Values:   &quot;, Y_test)
+print(&quot;Voting Classifier Accuracy:&quot;, accuracy)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Predicted Values: [1 0 2 1 1 0 1 2 1 2 0 1 2 0 0 1 2 1 1 2 0 2 0 2 2 2 2 2 0 0]
+Actual Values:    [1 0 2 1 1 0 1 2 1 2 0 1 2 0 0 1 2 1 1 2 0 2 0 2 2 2 2 2 0 0]
+Voting Classifier Accuracy: 1.0</code></pre>
+
+    <hr>
+
+
+    <!-- PRACTICAL 15 -->
+        
+    <h2>14. DFS State-Space Search</h2>
+    <p><strong>Question:</strong> Write a program to solve a state-space search problem using DFS. Start vertex - 1.</p>
+    <div style="margin: 15px 0;">
+        <img src="dfs_graph_1.png" alt="DFS State Space Graph" style="max-width: 100%; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+<pre><code>
+# Graph representation (Kontya node pasun kuthe kuthe jata yeta)
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5],
+    4: [2, 5, 6],
+    5: [3, 4, 6],
+    6: [4, 5]
+}
+
+def dfs_state_space(graph, start):
+    visited = set() # Visit jhalelya nodes thevnyasathi
+    stack = [start] # DFS sathi Stack vaparat ahet (LIFO - Last In First Out)
+    traversal = []  # Final traversal path
+    
+    print(&quot;Starting DFS State-Space Search...&quot;)
+    
+    while stack: # Jo paryant stack empty hot nahi
+        node = stack.pop() # Stack chya top madhun node kadha
+        
+        if node not in visited:
+            visited.add(node) # Visited mark kara
+            traversal.append(str(node))
+            print(f&quot;Visited: {node}&quot;)
+            
+            # Nodes numerical order madhe visit vhave mhanun reverse sort kartoy
+            # (Stack madhe jo shevati add hoto to pahila baher yeto)
+            neighbors = sorted(graph[node], reverse=True)
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    stack.append(neighbor) # Shejaryanna stack madhe push kara
+                    
+    print(&quot;-&quot; * 30)
+    print(&quot;Final DFS Traversal Path:&quot;)
+    print(&quot; -&gt; &quot;.join(traversal))
+
+if __name__ == &quot;__main__&quot;:
+    dfs_state_space(graph, 1)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Starting DFS State-Space Search...
+Visited: 1
+Visited: 2
+Visited: 4
+Visited: 5
+Visited: 3
+Visited: 6
+------------------------------
+Final DFS Traversal Path:
+1 -> 2 -> 4 -> 5 -> 3 -> 6</code></pre>
+
+    <hr>
+
+
+    <h2>15. Knowledge Base using logical rules and facts</h2>
+    <p><strong>Question:</strong> Write a program to build a Knowledge Base using logical rules and facts.</p>
+<pre><code>
+# Knowledge Base using Facts and Rules
+
+# Facts (Satya ghoshti - Ex: ha ek pakshi ahe)
+facts = {
+    &quot;bird&quot;: True,
+    &quot;has_feathers&quot;: True
+}
+
+# Rules (Niyam - Ex: Jar to bird ahe, tar to udu shakto)
+rules = {
+    &quot;bird&quot;: &quot;can_fly&quot;
+}
+
+# Facts print kara
+print(&quot;Facts in Knowledge Base:&quot;)
+for fact in facts:
+    print(&quot;-&quot;, fact)
+
+# Rule apply kara (Forward Chaining)
+# Jar &#x27;bird&#x27; he fact ahe, tar rules madhun tyacha conclusion (can_fly) milva
+if &quot;bird&quot; in facts and facts[&quot;bird&quot;] == True:
+    conclusion = rules[&quot;bird&quot;]
+
+    print(&quot;\nApplying Rule:&quot;)
+    print(&quot;If bird then can_fly&quot;)
+
+    print(&quot;\nConclusion:&quot;)
+    print(&quot;The bird&quot;, conclusion)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Facts in Knowledge Base:
+- bird
+- has_feathers
+Applying Rule:
+If bird then can_fly
+Conclusion:
+The bird can_fly</code></pre>
+    <hr>
+
+    <!-- PRACTICAL 19 -->
+        
+    <h2>16. 8-Puzzle using A*</h2>
+    <p><strong>Question:</strong> Write a program to solve the 8-Puzzle problem using the A* Search Algorithm.</p>
+<pre><code>
+import heapq
+
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0) # 0 mhanje blank tile
+
+def heuristic(state):
+    # Manhattan Distance formula (h value kadhnyasathi)
+    distance = 0
+    for i in range(9):
+        value = state[i]
+        if value != 0: # Blank space ignore kara
+            goal_pos = goal.index(value) # Tile chi original final position kay ahe?
+            # Current row/col ani goal row/col madhla difference add kara
+            distance += abs(i // 3 - goal_pos // 3)
+            distance += abs(i % 3 - goal_pos % 3)
+    return distance
+
+def neighbours(state):
+    result = []
+    zero = state.index(0) # 0 (Blank space) kuthya ahe te shodha
+    row, col = zero // 3, zero % 3 # Row ani column madhe convert kara
+    moves = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Up, Down, Left, Right
+
+    for dr, dc in moves:
+        nr, nc = row + dr, col + dc
+        if 0 &lt;= nr &lt; 3 and 0 &lt;= nc &lt; 3: # Board chya aat ahe ka check kara
+            new_zero = nr * 3 + nc # 1D array index madhe convert kara
+            new_state = list(state)
+            # Blank tile ani neighbor tile swap kara
+            new_state[zero], new_state[new_zero] = new_state[new_zero], new_state[zero]
+            result.append(tuple(new_state)) # Valid neighbor path
+
+    return result
+
+def astar(start):
+    # Queue madhe (f, g, state, path) ahe
+    queue = [(heuristic(start), 0, start, [start])]
+    visited = set()
+
+    while queue:
+        f, g, state, path = heapq.heappop(queue) # Lowest f score cha node baher kadha
+
+        if state in visited: continue
+        visited.add(state)
+
+        if state == goal: # Goal var pohochlyas path print kara
+            print(&quot;Solution:&quot;)
+            for step in path: print(step)
+            return
+
+        # Saglya neighbor states queue madhe add kara
+        for next_state in neighbours(state):
+            new_g = g + 1
+            new_f = new_g + heuristic(next_state) # f = g + h
+            heapq.heappush(queue, (new_f, new_g, next_state, path + [next_state]))
+
+start = (1, 2, 3, 4, 0, 6, 7, 5, 8)
+astar(start)
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Solution:
+(1, 2, 3, 4, 0, 6, 7, 5, 8)
+(1, 2, 3, 4, 5, 6, 7, 0, 8)
+(1, 2, 3, 4, 5, 6, 7, 8, 0)</code></pre>
+
+
+    <h2>17. CNN — Orange vs Apple</h2>
+    <p><strong>Question:</strong> Write a program to build a Convolutional Neural Network (CNN) for 
+image recognition.(Orange vs Apple)</p>
+    <p><strong>Note:</strong> You must install <code>tensorflow</code> to run this code. Run: <code>pip install tensorflow</code> in your terminal.</p>
+<pre><code>
+import tensorflow as tf
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+import warnings
+warnings.filterwarnings(&quot;ignore&quot;)
+
+# Using random simulated data as a placeholder for actual images
+# (X_train mhanje image pixels, Y_train mhanje Orange(0) ki Apple(1))
+import numpy as np
+X_train = np.random.rand(10, 128, 128, 3) # 10 dummy images of size 128x128 with 3 colors (RGB)
+Y_train = np.random.randint(2, size=10) # 10 Labels (0 or 1)
+X_test = np.random.rand(5, 128, 128, 3) # 5 test images
+Y_test = np.random.randint(2, size=5)
+
+# CNN Model define kartoy
+model = Sequential([
+    # Step 1: Convolution Layer (Image madhun lines, curves extract karto)
+    Conv2D(32, (3, 3), activation=&quot;relu&quot;, input_shape=(128, 128, 3)),
+    # Step 2: Pooling Layer (Image chi size choti karto, pan information same thevto)
+    MaxPooling2D(),
+    
+    # Layer 2 for deep learning
+    Conv2D(64, (3, 3), activation=&quot;relu&quot;),
+    MaxPooling2D(),
+    
+    # Step 3: Flatten (2D matrix la 1D array madhe convert karto, so Dense layer la deta yeil)
+    Flatten(),
+    
+    # Step 4: Fully Connected Neural Network
+    Dense(128, activation=&quot;relu&quot;), # 128 neurons chi hidden layer
+    Dense(1, activation=&quot;sigmoid&quot;) # Final output (Sigmoid: 0.5 peksha jast aala tar Apple, nahi tar Orange)
+])
+
+# Model compile kara (Loss function ani Optimizer set kara)
+model.compile(optimizer=&quot;adam&quot;, loss=&quot;binary_crossentropy&quot;, metrics=[&quot;accuracy&quot;])
+
+print(&quot;Training CNN Model...&quot;)
+# Model train kara (Fit mhanje data var pattern learn kara)
+model.fit(X_train, Y_train, epochs=2, verbose=1)
+
+print(&quot;\nEvaluating Model...&quot;)
+# Test data var model check kara kiti correct ahe (Accuracy check)
+loss, accuracy = model.evaluate(X_test, Y_test, verbose=0)
+print(&quot;Test Accuracy:&quot;, round(accuracy, 2))
+</code></pre>
+    <h3>Output:</h3>
+<pre><code>Training CNN Model...
+Epoch 1/2
+1/1 [==============================] - 1s 1s/step - loss: 0.6976 - accuracy: 0.5000
+Epoch 2/2
+1/1 [==============================] - 0s 120ms/step - loss: 14.2831 - accuracy: 0.4000
+
+Evaluating Model...
+Test Accuracy: 0.6</code></pre>
+
+    <hr>
+
+
+    <!-- SUMMARY SECTION -->
+    <!-- <h1>⭐ Final 10 practicals — what students actually learn</h1>
+    <p>
+        <strong>1:</strong> BFS – Monkey Banana, A* Search<br>
+        <strong>2:</strong> Water Jug – BFS, Backtracking – CSP<br>
+        <strong>3:</strong> BFS – Graph, Alpha-Beta Pruning<br>
+        <strong>7:</strong> A* – V1 to V6, Map Coloring – CSP<br>
+        <strong>8:</strong> 4-Puzzle – A*, Minimax + Alpha-Beta<br>
+        <strong>11:</strong> Minimax + Alpha-Beta, Backward Chaining<br>
+        <strong>12:</strong> BFS – Monkey Banana, Linear vs RBF SVM<br>
+        <strong>13:</strong> Water Jug – BFS, Voting Classifier<br>
+        <strong>15:</strong> DFS – State Space, Clustering Objectives<br>
+        <strong>19:</strong> 8-Puzzle – A*, CNN – Orange vs Apple
+    </p>
+
+    <h2>🔥 Teaching Groups (Logical Sequence)</h2>
+    <p>This is the sequence to use for classes because students can <strong>reuse the same basic logic</strong> instead of memorizing 20 unrelated programs.</p>
+    
+    <p><strong>1. BFS</strong>: Monkey Banana, Water Jug, Graph<br>
+    <strong>2. DFS</strong>: State Space<br>
+    <strong>3. A*</strong>: Shortest Path, 4-Puzzle, 8-Puzzle<br>
+    <strong>4. CSP</strong>: Backtracking, Map Coloring<br>
+    <strong>5. Game AI</strong>: Minimax, Alpha-Beta<br>
+    <strong>6. Knowledge Representation</strong>: Backward Chaining<br>
+    <strong>7. Machine Learning</strong>: SVM, Voting Classifier, Clustering<br>
+    <strong>8. Deep Learning</strong>: CNN</p> -->
+
+</body>
+</html>
