@@ -107,7 +107,7 @@
             margin-top: 2rem;
         }
 
-        .marathi-box {
+        .concept-box {
             background-color: #fffbeb;
             border-left: 4px solid var(--accent);
             padding: 1rem 1.5rem;
@@ -143,13 +143,105 @@
             border-radius: 8px;
             margin-top: 2rem;
         }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        .badge-uninformed { background: #dbeafe; color: #1e40af; }
+        .badge-informed { background: #dcfce7; color: #15803d; }
+        .badge-game { background: #fef3c7; color: #92400e; }
+        .badge-csp { background: #f3e8ff; color: #6b21a8; }
+        .badge-kr { background: #ffe4e6; color: #9f1239; }
+
+        .toc-box {
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+        .toc-box h3 { margin-top: 0; color: var(--secondary); }
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.75rem;
+        }
+        .toc-link {
+            display: block;
+            padding: 0.6rem 0.85rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .toc-link:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                color: black !important;
+            }
+            .container {
+                box-shadow: none !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+            }
+            .code-block {
+                background: #f8fafc !important;
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1 !important;
+                page-break-inside: avoid;
+            }
+            table, .highlight-box, .assignment-box, .concept-box, .tree-diagram {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI Problem Solving & Search</h1>
+        <h1>AI Problem Solving & Search — Complete Practical Handbook</h1>
+        
+        <div class="toc-box">
+            <h3>📖 Quick Practical Index (SPPU Exam Slips)</h3>
+            <div class="toc-grid">
+                <a href="#foundations" class="toc-link">📌 1. Search Problem Foundations</a>
+                <a href="#bfs-theory" class="toc-link">🔵 2. Blind / BFS Concepts & Queue</a>
+                <a href="#p1-monkey" class="toc-link"><span class="badge badge-uninformed">Slip 1</span> P1: Monkey-Banana (BFS)</a>
+                <a href="#p2-waterjug" class="toc-link"><span class="badge badge-uninformed">Slip 2, 13</span> P2: Water Jug Problem (BFS)</a>
+                <a href="#p3-dfs" class="toc-link"><span class="badge badge-uninformed">Slip 15</span> P3: DFS State-Space Search</a>
+                <a href="#p4-astar" class="toc-link"><span class="badge badge-informed">Slip 1, 7</span> P4: A* Shortest Path Search</a>
+                <a href="#p5-8puzzle" class="toc-link"><span class="badge badge-informed">Slip 8, 19</span> P5: 8-Puzzle / 4-Puzzle (A*)</a>
+                <a href="#p6-alphabeta" class="toc-link"><span class="badge badge-game">Slip 3, 8, 11</span> P6: Minimax & Alpha-Beta Pruning</a>
+                <a href="#p7-csp" class="toc-link"><span class="badge badge-csp">Slip 2, 7</span> P7: CSP — Graph & Map Coloring</a>
+                <a href="#p8-backward" class="toc-link"><span class="badge badge-kr">Slip 11, 15</span> P8: Backward Chaining Inference</a>
+                <a href="#master-matrix" class="toc-link">⚡ 9. Search Algorithms Master Matrix</a>
+                <a href="#viva-bank" class="toc-link">🎯 10. Ultimate Viva-Voce Question Bank</a>
+            </div>
+        </div>
 
-        <h2>1. What is Artificial Intelligence?</h2>
+        <h2 id="foundations">1. What is Artificial Intelligence?</h2>
         <div class="highlight-box">
             <strong>Definition:</strong> AI is the ability of a machine to perform tasks that normally require human intelligence—such as recognizing patterns, making decisions, and solving problems.
         </div>
@@ -254,7 +346,7 @@
         <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
 
         <h1>CS-321-VSC-P — Assignment 1</h1>
-        <h2>Lesson 2: Blind / Uninformed Search — BFS</h2>
+        <h2 id="bfs-theory">Lesson 2: Blind / Uninformed Search — BFS</h2>
         <p><em>Your workbook now moves from <strong>State Space Representation</strong> to <strong>Blind / Uninformed Search</strong>, beginning with <strong>Breadth First Search (BFS)</strong>.</em></p>
 
         <h2>1. First understand: What is Search?</h2>
@@ -264,8 +356,8 @@
             <strong>Answer:</strong> We use a search technique.
         </div>
         
-        <div class="marathi-box">
-            <strong>Marathi:</strong> आपल्याला Initial State आणि Goal State माहीत आहे. पण Initial State पासून Goal State पर्यंत कसे जायचे हे शोधण्यासाठी Search वापरतो.
+        <div class="highlight-box">
+            <strong>Key Idea:</strong> We know the Initial State and the Goal State. A search algorithm determines the sequence of valid transitions needed to navigate from the start to the target.
         </div>
 
         <p>There are different search techniques. For Assignment 1, the important ones are:</p>
@@ -280,10 +372,9 @@
             <strong>Blind / Uninformed Search:</strong> A search technique that does <strong>not use additional information or a heuristic</strong> about how close a state is to the goal.
         </div>
         
-        <div class="marathi-box">
-            <strong>Marathi:</strong> Blind Search म्हणजे goal कुठे आहे किंवा कोणता state goal च्या जवळ आहे याची extra information न वापरता search करणे.
+        <div class="highlight-box">
+            <strong>Intuition:</strong> A blind search algorithm does not possess an internal map or heuristic evaluation of closeness to the target. It systematically expands and explores valid successor states purely by traversal order: <em>"I do not know which move is best beforehand; I test each reachable state methodically."</em>
         </div>
-        <p>Computer basically says: <em>"मला कोणता मार्ग योग्य आहे हे आधीपासून माहीत नाही. मी available states तपासत जातो."</em></p>
 
         <h2>3. BFS — Breadth First Search</h2>
         <p>Now introduce the full form: <strong>BFS = Breadth First Search</strong></p>
@@ -292,16 +383,16 @@
             <strong>Simple Definition:</strong> BFS is a search algorithm that explores nodes level by level.
         </div>
         
-        <div class="marathi-box">
-            <strong>Marathi:</strong> BFS ही अशी search technique आहे जी tree मधील nodes एक-एक level पूर्ण करून पुढील level वर जाते.
+        <div class="highlight-box">
+            <strong>Key Traversal Rule:</strong> BFS explores every node on depth level <em>d</em> completely before expanding any child node at depth <em>d + 1</em>.
         </div>
 
         <h2>4. What is "Level by Level"?</h2>
         <div class="tree-diagram">                 A
               /     \
              B       C
-           /  \     /  \
-          D    E   F    G</div>
+            /  \     /  \
+           D    E   F    G</div>
           
         <p>Now divide it into levels:</p>
         <div class="code-block">Level 0        A
@@ -311,14 +402,14 @@ Level 2      D E F G</div>
         <p>BFS first visits <code>A</code>, then <code>B C</code>, then <code>D E F G</code>.</p>
         <p><strong>BFS traversal:</strong> A → B → C → D → E → F → G</p>
         
-        <div class="marathi-box">
-            <strong>Marathi:</strong> BFS मध्ये आधी Level 0, मग Level 1, मग Level 2 अशा क्रमाने nodes visit केले जातात.
+        <div class="highlight-box">
+            <strong>Level Progression:</strong> All nodes in Level 0 are expanded first, followed by all nodes in Level 1, then all nodes in Level 2.
         </div>
 
         <h2>5. What is a Node?</h2>
         <p>A <strong>node</strong> is an individual element/state in the search tree. In our example, A, B, C, D, etc. are nodes.</p>
-        <div class="marathi-box">
-            <strong>Marathi:</strong> Tree मधील प्रत्येक individual element/state ला Node म्हणतात.
+        <div class="highlight-box">
+            <strong>Node Definition:</strong> An individual element or discrete configuration state in the search space is called a <strong>Node</strong>.
         </div>
 
         <h2>6. What is a Tree?</h2>
@@ -336,8 +427,8 @@ F,G → Children of C</div>
         <div class="highlight-box">
             <strong>FIFO — First In, First Out</strong>
         </div>
-        <div class="marathi-box">
-            <strong>Marathi:</strong> Queue म्हणजे रांग. जो student आधी रांगेत आला तो आधी बाहेर/serve होतो. म्हणून FIFO = First In First Out.
+        <div class="highlight-box">
+            <strong>Queue Analogy:</strong> Think of customers standing in line at a service counter. The person who arrived first is attended to first. Hence: <strong>FIFO = First In, First Out</strong>.
         </div>
 
         <h2>9. Why Does BFS Use Queue?</h2>
@@ -374,22 +465,22 @@ Step 7: Visit G. (Goal found! STOP)</div>
 7. Add unvisited successors to the queue.
 8. Repeat until the goal is found or queue is empty.</div>
         
-        <div class="marathi-box">
-            <strong>Marathi:</strong><br>
-            1. Initial state घ्या.<br>
-            2. तो Queue मध्ये टाका.<br>
-            3. Queue मधील पहिला node काढा.<br>
-            4. तो Goal आहे का ते तपासा.<br>
-            5. Goal असेल → Stop.<br>
-            6. Goal नसेल → त्याचे successor states शोधा.<br>
-            7. Unvisited states Queue मध्ये टाका.<br>
-            8. Goal मिळेपर्यंत repeat करा.
+        <div class="highlight-box">
+            <strong>Algorithmic Execution Steps:</strong><br>
+            1. Initialize search with the starting state.<br>
+            2. Push initial state into the FIFO Queue.<br>
+            3. Dequeue the front state.<br>
+            4. Check if current state satisfies the goal condition.<br>
+            5. If goal is reached &rarr; terminate successfully.<br>
+            6. Otherwise, generate all valid successor states.<br>
+            7. Enqueue unvisited successors to the queue.<br>
+            8. Repeat until the goal is found or the queue is exhausted.
         </div>
 
         <h2>12. What is a Successor?</h2>
         <p>States generated from another state by applying an action.</p>
-        <div class="marathi-box">
-            <strong>Marathi:</strong> एखाद्या state वर action केल्यानंतर मिळणाऱ्या पुढील states ना Successor States म्हणतात.
+        <div class="highlight-box">
+            <strong>Successor State:</strong> Any state directly produced by applying an operator/action to the current state is called a <strong>Successor State</strong>.
         </div>
 
         <h2>13. BFS in One Simple Diagram (Board Layout)</h2>
@@ -459,7 +550,7 @@ while queue:         # Loop while queue is not empty
         </div>
         <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
 
-        <h2>Practical 1: Monkey-Banana Problem using Breadth-First Search (BFS)</h2>
+        <h2 id="p1-monkey"><span class="badge badge-uninformed">Practical 1</span> Monkey-Banana Problem using Breadth-First Search (BFS)</h2>
 
         <h3>1. Problem Definition & Physical Setup</h3>
         <p>A hungry monkey enters a room with high ceilings:</p>
@@ -614,6 +705,1055 @@ Goal: Banana Obtained!</div>
                 <li><strong>What is the time and space complexity of BFS?</strong><br><em>Answer:</em> Both time complexity and space complexity are <em>O(b<sup>d</sup>)</em>, where <em>b</em> is the branching factor and <em>d</em> is the depth of the shallowest goal.</li>
             </ol>
         </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 2: WATER JUG USING BFS -->
+        <!-- ========================================================================= -->
+        <h2 id="p2-waterjug"><span class="badge badge-uninformed">Slip 2, 13</span> Practical 2: Water Jug Problem using Breadth-First Search (BFS)</h2>
+
+        <h3>1. Problem Definition & Physical Setup</h3>
+        <p>You are given two unmeasured water jugs with fixed maximum capacities:</p>
+        <ul>
+            <li><strong>Jug X:</strong> Capacity of <strong>4 Liters</strong>.</li>
+            <li><strong>Jug Y:</strong> Capacity of <strong>3 Liters</strong>.</li>
+            <li>An infinite supply of tap water and a ground drain are available. Neither jug has measurement markings.</li>
+            <li><strong>Initial State:</strong> Both jugs are completely empty: <code>(0, 0)</code>.</li>
+            <li><strong>Goal State:</strong> Obtain exactly <strong>2 Liters</strong> of water in either jug: <code>x == 2</code> or <code>y == 2</code> (typically reaching <code>(4, 2)</code> or <code>(2, 0)</code>).</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> Why use BFS for the Water Jug problem? Because BFS systematically explores every reachable configuration level by level, it is guaranteed to discover the solution sequence with the minimum possible number of pouring operations (shortest path).
+        </div>
+
+        <h3>2. State Space Representation & Production Rules</h3>
+        <p>A state is formally defined as an ordered pair <code>(x, y)</code>, where <code>x &isin; {0, 1, 2, 3, 4}</code> represents liters in the 4L jug, and <code>y &isin; {0, 1, 2, 3}</code> represents liters in the 3L jug.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Rule #</th>
+                    <th>Operator / Action</th>
+                    <th>Precondition</th>
+                    <th>Transition: (x, y) &rarr; Next State</th>
+                    <th>Plain English Meaning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>R1</strong></td>
+                    <td>Fill 4L Jug</td>
+                    <td><code>x &lt; 4</code></td>
+                    <td><code>(4, y)</code></td>
+                    <td>Fill the 4-Liter jug to maximum capacity from tap</td>
+                </tr>
+                <tr>
+                    <td><strong>R2</strong></td>
+                    <td>Fill 3L Jug</td>
+                    <td><code>y &lt; 3</code></td>
+                    <td><code>(x, 3)</code></td>
+                    <td>Fill the 3-Liter jug to maximum capacity from tap</td>
+                </tr>
+                <tr>
+                    <td><strong>R3</strong></td>
+                    <td>Empty 4L Jug</td>
+                    <td><code>x &gt; 0</code></td>
+                    <td><code>(0, y)</code></td>
+                    <td>Dump all water from 4-Liter jug onto the ground</td>
+                </tr>
+                <tr>
+                    <td><strong>R4</strong></td>
+                    <td>Empty 3L Jug</td>
+                    <td><code>y &gt; 0</code></td>
+                    <td><code>(x, 0)</code></td>
+                    <td>Dump all water from 3-Liter jug onto the ground</td>
+                </tr>
+                <tr>
+                    <td><strong>R5</strong></td>
+                    <td>Pour 4L &rarr; 3L</td>
+                    <td><code>x &gt; 0 and y &lt; 3</code></td>
+                    <td><code>(max(0, x - (3 - y)), min(3, x + y))</code></td>
+                    <td>Pour from 4L into 3L until 3L is completely full</td>
+                </tr>
+                <tr>
+                    <td><strong>R6</strong></td>
+                    <td>Pour 3L &rarr; 4L</td>
+                    <td><code>y &gt; 0 and x &lt; 4</code></td>
+                    <td><code>(min(4, x + y), max(0, y - (4 - x)))</code></td>
+                    <td>Pour from 3L into 4L until 4L is completely full</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>3. State-Space Search Tree & Solution Path</h3>
+        <div class="tree-diagram">                     (0, 0)  [Initial: Both Empty]
+                   /        \
+             (4, 0)          (0, 3)  <-- Selected by BFS frontier
+                            /      \
+                        (3, 0)    (0, 0)* [Visited]
+                          |
+                        (3, 3)  [Fill 3L]
+                          |
+                        (4, 2)  <-- GOAL STATE FOUND! (2L in 3L jug)</div>
+
+        <p><strong>Shortest Solution Sequence:</strong></p>
+        <div class="code-block">Step 0: (0, 0)  --> Start with both jugs empty
+Step 1: (0, 3)  --> Fill the 3-Liter jug completely
+Step 2: (3, 0)  --> Pour all 3 Liters from 3L jug into 4L jug
+Step 3: (3, 3)  --> Fill the 3-Liter jug completely again
+Step 4: (4, 2)  --> Pour 1 Liter from 3L into 4L until 4L is full (Leaving exactly 2L in 3L jug!)</div>
+
+        <h3>4. Complete Python Implementation</h3>
+        <div class="code-block">from collections import deque # Double-ended queue for BFS (O(1) popleft)
+
+def water_jug():
+    # Set to store visited states and prevent infinite cyclic loops
+    visited = set()
+    
+    # Queue stores tuples of: (current_state, path_taken_so_far)
+    queue = deque([((0, 0), [(0, 0)])]) 
+
+    while queue:
+        (x, y), path = queue.popleft() # FIFO: Remove shallowest unvisited state
+
+        if (x, y) in visited:
+            continue # Skip states that have already been explored
+        visited.add((x, y))
+
+        # Goal Condition: Check if either jug contains exactly 2 Liters
+        if x == 2 or y == 2:
+            print("Solution Path:")
+            for state in path:
+                print(state)
+            return
+
+        # Generate all 6 possible production moves (Successor States)
+        states = [
+            (4, y),                                   # 1. Fill 4L jug
+            (x, 3),                                   # 2. Fill 3L jug
+            (0, y),                                   # 3. Empty 4L jug
+            (x, 0),                                   # 4. Empty 3L jug
+            (max(0, x - (3 - y)), min(3, x + y)),     # 5. Pour 4L -> 3L until full
+            (min(4, x + y), max(0, y - (4 - x)))      # 6. Pour 3L -> 4L until full
+        ]
+
+        # Enqueue unvisited valid successor states
+        for s in states:
+            if s not in visited:
+                queue.append((s, path + [s]))
+
+if __name__ == "__main__":
+    water_jug()</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Solution Path:
+(0, 0)
+(0, 3)
+(3, 0)
+(3, 3)
+(4, 2)</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement Breadth-First Search (BFS) to solve the Water Jug problem (4L and 3L jugs to get 2L).</li>
+                <li><strong>Initial State:</strong> <code>(0, 0)</code>.</li>
+                <li><strong>Goal State:</strong> <code>x == 2</code> or <code>y == 2</code> (reached at <code>(4, 2)</code>).</li>
+                <li><strong>Data Structure:</strong> FIFO Queue (<code>collections.deque</code>) and Visited Set.</li>
+                <li><strong>Optimality Guarantee:</strong> BFS explores states level-by-level, ensuring the returned solution path has the minimum possible pouring operations.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>How is the state space bounded in this problem?</strong><br><em>Answer:</em> The 4L jug can have 5 values (0..4) and the 3L jug can have 4 values (0..3). Total discrete states = 5 &times; 4 = 20 states maximum.</li>
+                <li><strong>What mathematical condition determines if a Water Jug problem has a solution?</strong><br><em>Answer:</em> By <em>B&eacute;zout's Identity</em>, a solution exists if and only if the target quantity is a multiple of the Greatest Common Divisor of the two jug capacities: <code>target % gcd(cap1, cap2) == 0</code>. Here, <code>gcd(4, 3) = 1</code>, and <code>2 % 1 == 0</code>, so a solution is guaranteed.</li>
+                <li><strong>Why is a visited set critical in state-space BFS?</strong><br><em>Answer:</em> Without a visited set, reversible actions (like filling and emptying repeatedly) create closed cycles, causing an infinite loop and memory exhaustion.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 3: DFS STATE SPACE SEARCH -->
+        <!-- ========================================================================= -->
+        <h2 id="p3-dfs"><span class="badge badge-uninformed">Slip 15</span> Practical 3: State-Space Search using Depth-First Search (DFS)</h2>
+
+        <h3>1. Theory & Working Mechanism of DFS</h3>
+        <p><strong>Depth-First Search (DFS)</strong> is an uninformed search strategy that systematically progresses as deeply as possible along each branch before backtracking.</p>
+        
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> Depth-First Search (DFS) systematically pursues each branch to its maximum depth. If a dead-end state is reached, it backtracks to the previous node to explore unexplored branches using a LIFO Stack to minimize memory consumption.
+        </div>
+
+        <h3>2. Master Comparison: BFS vs DFS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Evaluation Criteria</th>
+                    <th>Breadth-First Search (BFS)</th>
+                    <th>Depth-First Search (DFS)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Data Structure</strong></td>
+                    <td><strong>Queue (FIFO)</strong> — First In, First Out</td>
+                    <td><strong>Stack (LIFO)</strong> — Last In, First Out / System Call Stack</td>
+                </tr>
+                <tr>
+                    <td><strong>Exploration Pattern</strong></td>
+                    <td>Level-by-level (horizontal / broad)</td>
+                    <td>Path-by-path (vertical / deep)</td>
+                </tr>
+                <tr>
+                    <td><strong>Space Complexity</strong></td>
+                    <td><strong>O(b<sup>d</sup>)</strong> — Very High (stores entire frontier)</td>
+                    <td><strong>O(b &middot; m)</strong> — Extremely Low (stores only active path)</td>
+                </tr>
+                <tr>
+                    <td><strong>Time Complexity</strong></td>
+                    <td><strong>O(b<sup>d</sup>)</strong></td>
+                    <td><strong>O(b<sup>m</sup>)</strong> (where m is max depth)</td>
+                </tr>
+                <tr>
+                    <td><strong>Optimality</strong></td>
+                    <td>Guaranteed optimal for uniform step cost</td>
+                    <td>Not optimal (may return a long path when a short one exists)</td>
+                </tr>
+                <tr>
+                    <td><strong>Completeness</strong></td>
+                    <td>Complete (always finds goal if it exists)</td>
+                    <td>Incomplete if infinite branches or unvisited cycles exist</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>3. State-Space Graph & DFS Stack Trace</h3>
+        <div class="tree-diagram">Graph Topology (Start Node = 1):
+        (1)
+       /   \
+     (2)   (3)
+     / \     \
+   (1) (4)   (5)
+       / \   / \
+     (2) (5)(6) (6)
+          |
+         (6)</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Step #</th>
+                    <th>Current Node Popped (LIFO)</th>
+                    <th>Visited Set</th>
+                    <th>Unvisited Neighbors</th>
+                    <th>Stack State (Top &rarr; Bottom)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>1</td><td>1 (Start)</td><td>{1}</td><td>[2, 3]</td><td><code>[2, 3]</code></td></tr>
+                <tr><td>2</td><td>2</td><td>{1, 2}</td><td>[4]</td><td><code>[4, 3]</code></td></tr>
+                <tr><td>3</td><td>4</td><td>{1, 2, 4}</td><td>[5, 6]</td><td><code>[5, 6, 3]</code></td></tr>
+                <tr><td>4</td><td>5</td><td>{1, 2, 4, 5}</td><td>[3, 6]</td><td><code>[3, 6, 6, 3]</code></td></tr>
+                <tr><td>5</td><td>3</td><td>{1, 2, 4, 5, 3}</td><td>All visited</td><td><code>[6, 6, 3]</code></td></tr>
+                <tr><td>6</td><td>6</td><td>{1, 2, 4, 5, 3, 6}</td><td>All visited</td><td>All nodes visited!</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Complete Python Implementation</h3>
+        <div class="code-block"># Graph adjacency representation for State-Space Search
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5],
+    4: [2, 5, 6],
+    5: [3, 4, 6],
+    6: [4, 5]
+}
+
+def dfs_state_space(graph, start):
+    visited = set()   # Tracks already explored nodes to avoid cycles
+    stack = [start]   # Stack implements LIFO (Last-In, First-Out)
+    traversal = []    # Stores the sequential visit order
+    
+    print("Starting DFS State-Space Search...")
+    
+    while stack:
+        node = stack.pop() # Pull the most recently pushed node
+        
+        if node not in visited:
+            visited.add(node)
+            traversal.append(str(node))
+            print(f"Visited: {node}")
+            
+            # Sort neighbors in descending order so smaller numbers are popped first
+            neighbors = sorted(graph[node], reverse=True)
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    stack.append(neighbor) # Push neighbor onto LIFO stack
+                    
+    print("-" * 30)
+    print("Final DFS Traversal Path:")
+    print(" -> ".join(traversal))
+
+if __name__ == "__main__":
+    dfs_state_space(graph, 1)</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Starting DFS State-Space Search...
+Visited: 1
+Visited: 2
+Visited: 4
+Visited: 5
+Visited: 3
+Visited: 6
+------------------------------
+Final DFS Traversal Path:
+1 -> 2 -> 4 -> 5 -> 3 -> 6</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement state-space search using Depth-First Search (DFS) on a given graph.</li>
+                <li><strong>Data Structure:</strong> Stack (LIFO: Last-In, First-Out).</li>
+                <li><strong>Traversal Result:</strong> <code>1 &rarr; 2 &rarr; 4 &rarr; 5 &rarr; 3 &rarr; 6</code>.</li>
+                <li><strong>Key Finding:</strong> DFS consumes linear space <em>O(b &middot; m)</em>, which is orders of magnitude less memory than BFS.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>Why does DFS have a much lower memory footprint than BFS?</strong><br><em>Answer:</em> BFS must keep the entire breadth-level frontier in memory (exponential $O(b^d)$). In contrast, DFS only stores the single active path from the root down to the current node, needing only $O(b \cdot m)$ space.</li>
+                <li><strong>What is the purpose of reversing neighbor order when pushing to the stack?</strong><br><em>Answer:</em> A stack is LIFO. By sorting neighbors in reverse (e.g. pushing 3 then 2), the smallest numeric vertex (2) sits at the top of the stack and is popped first.</li>
+                <li><strong>What is Depth-Limited Search (DLS)?</strong><br><em>Answer:</em> DLS is DFS equipped with a predefined cutoff depth limit $l$. It prevents DFS from entering infinite loops on infinitely deep paths.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 4: A* SEARCH ALGORITHM -->
+        <!-- ========================================================================= -->
+        <h2 id="p4-astar"><span class="badge badge-informed">Slip 1, 7</span> Practical 4: A* Search Algorithm (Informed / Heuristic Search)</h2>
+
+        <h3>1. Theory: What Makes A* "Informed"?</h3>
+        <p>Uninformed searches (BFS, DFS) operate blindly without knowing if a step brings them closer to the target. <strong>A* Search</strong> is an <strong>Informed (Heuristic) Search</strong> that uses domain knowledge to direct the search directly toward the goal.</p>
+
+        <div class="highlight-box">
+            <h3>The Fundamental A* Evaluation Function</h3>
+            <p style="font-size: 1.3rem; font-weight: bold; color: var(--primary); text-align: center;">f(n) = g(n) + h(n)</p>
+            <ul>
+                <li><strong>g(n):</strong> The <strong>exact path cost</strong> incurred so far from the Start Node to current node <em>n</em>.</li>
+                <li><strong>h(n):</strong> The <strong>heuristic estimated cost</strong> from current node <em>n</em> to the Goal Node.</li>
+                <li><strong>f(n):</strong> The <strong>total estimated cost</strong> of the cheapest solution path passing through node <em>n</em>.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> A* Search intelligently balances the past accumulated path cost $g(n)$ with the future estimated cost $h(n)$ through the evaluation formula $f(n) = g(n) + h(n)$. A Min-Heap Priority Queue guarantees that the frontier node with the lowest overall estimated cost is always explored first.
+        </div>
+
+        <h3>2. Heuristic Admissibility & Optimality Condition</h3>
+        <div class="highlight-box">
+            <strong>Admissibility Rule:</strong> A heuristic $h(n)$ is admissible if it <strong>never overestimates</strong> the true minimal cost to reach the goal, i.e., $0 \le h(n) \le h^*(n)$ for all $n$, where $h^*(n)$ is the true actual cost.
+            <br><br>
+            <strong>Theorem:</strong> If $h(n)$ is admissible, the A* algorithm is <strong>guaranteed to find the optimal shortest path</strong>.
+        </div>
+
+        <h3>3. Graph Topology & Heuristic Table</h3>
+        <div class="tree-diagram">Weighted Graph Topology (Start = A, Goal = G):
+           (A)
+          / 1 \ 4
+        (B)   (C)
+       2/ \5    \3
+     (D)  (E)   (F)
+      3\   /1   /2
+        (G) <-- Goal</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Node</th>
+                    <th>Heuristic h(n) [Distance to G]</th>
+                    <th>Connected Neighbors & Edge Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>A (Start)</strong></td><td>6</td><td>B (cost 1), C (cost 4)</td></tr>
+                <tr><td><strong>B</strong></td><td>5</td><td>D (cost 2), E (cost 5)</td></tr>
+                <tr><td><strong>C</strong></td><td>4</td><td>F (cost 3)</td></tr>
+                <tr><td><strong>D</strong></td><td>3</td><td>G (cost 3)</td></tr>
+                <tr><td><strong>E</strong></td><td>2</td><td>G (cost 1)</td></tr>
+                <tr><td><strong>F</strong></td><td>2</td><td>G (cost 2)</td></tr>
+                <tr><td><strong>G (Goal)</strong></td><td>0</td><td>Goal State (Terminal)</td></tr>
+            </tbody>
+        </table>
+
+        <h3>4. Step-by-Step Priority Queue Trace</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Node Dequeued (Lowest f)</th>
+                    <th>Current g(n)</th>
+                    <th>Heuristic h(n)</th>
+                    <th>Total f(n)</th>
+                    <th>Frontier Priority Queue [ (f, g, node) ]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>0</td><td>—</td><td>—</td><td>—</td><td>—</td><td><code>[(6, 0, 'A')]</code></td></tr>
+                <tr><td>1</td><td><strong>A</strong></td><td>0</td><td>6</td><td>6</td><td><code>[(6, 1, 'B'), (8, 4, 'C')]</code></td></tr>
+                <tr><td>2</td><td><strong>B</strong></td><td>1</td><td>5</td><td>6</td><td><code>[(6, 3, 'D'), (8, 6, 'E'), (8, 4, 'C')]</code></td></tr>
+                <tr><td>3</td><td><strong>D</strong></td><td>3</td><td>3</td><td>6</td><td><code>[(6, 6, 'G'), (8, 6, 'E'), (8, 4, 'C')]</code></td></tr>
+                <tr><td>4</td><td><strong>G (Goal!)</strong></td><td><strong>6</strong></td><td><strong>0</strong></td><td><strong>6</strong></td><td>Goal found! Terminate search.</td></tr>
+            </tbody>
+        </table>
+
+        <h3>5. Complete Python Implementation</h3>
+        <div class="code-block">import heapq # Python Min-Heap Priority Queue module
+
+# Graph adjacency representation: node -> {neighbor: edge_cost}
+graph = {
+    'A': {'B': 1, 'C': 4},
+    'B': {'D': 2, 'E': 5},
+    'C': {'F': 3},
+    'D': {'G': 3},
+    'E': {'G': 1},
+    'F': {'G': 2},
+    'G': {} # Goal node
+}
+
+# Heuristic estimated cost to goal G
+h = {
+    'A': 6, 'B': 5, 'C': 4, 'D': 3, 'E': 2, 'F': 2, 'G': 0
+}
+
+def a_star(start, goal):
+    # Priority Queue stores tuples of: (f_score, g_cost, current_node, path)
+    queue = [(h[start], 0, start, [start])]
+    visited = set()
+
+    while queue:
+        # heappop always removes the element with the SMALLEST f value
+        f, g, node, path = heapq.heappop(queue)
+
+        if node in visited:
+            continue
+        visited.add(node)
+
+        print("Visiting:", node)
+
+        # Goal check
+        if node == goal:
+            print("\nShortest Path:", " -> ".join(path))
+            print("Total Cost:", g)
+            return
+
+        # Expand neighbors
+        for neighbour, cost in graph[node].items():
+            new_g = g + cost              # Exact cost to reach neighbour
+            new_f = new_g + h[neighbour]  # f = g + h formula
+
+            # Push candidate path into priority queue
+            heapq.heappush(queue, (new_f, new_g, neighbour, path + [neighbour]))
+
+if __name__ == "__main__":
+    a_star('A', 'G')</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Visiting: A
+Visiting: B
+Visiting: D
+Visiting: G
+
+Shortest Path: A -> B -> D -> G
+Total Cost: 6</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement the A* Search algorithm to find the optimal shortest path in a weighted graph.</li>
+                <li><strong>Evaluation Function:</strong> $f(n) = g(n) + h(n)$.</li>
+                <li><strong>Data Structure Used:</strong> Min-Heap / Priority Queue (<code>heapq</code>).</li>
+                <li><strong>Optimal Result:</strong> Path: <code>A &rarr; B &rarr; D &rarr; G</code> with total cost = <code>6</code>.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>What happens if the heuristic h(n) = 0 for all nodes?</strong><br><em>Answer:</em> When $h(n) = 0$, $f(n) = g(n)$, and A* becomes identical to <strong>Dijkstra's Algorithm / Uniform Cost Search (UCS)</strong>.</li>
+                <li><strong>What is the difference between an admissible heuristic and a consistent heuristic?</strong><br><em>Answer:</em> An admissible heuristic never overestimates the true cost to the goal ($h(n) \le h^*(n)$). A consistent (monotonic) heuristic additionally obeys the triangle inequality: $h(n) \le c(n, a, n') + h(n')$.</li>
+                <li><strong>Why does A* use a Priority Queue?</strong><br><em>Answer:</em> A Priority Queue guarantees that the frontier node with the lowest total estimated cost $f(n)$ is always expanded next.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 5: 8-PUZZLE USING A* SEARCH -->
+        <!-- ========================================================================= -->
+        <h2 id="p5-8puzzle"><span class="badge badge-informed">Slip 8, 19</span> Practical 5: 8-Puzzle Problem using A* Search</h2>
+
+        <h3>1. Problem Formulation</h3>
+        <p>The 8-puzzle is a classic sliding tile problem played on a 3&times;3 board with 8 numbered tiles and 1 blank space (represented by <code>0</code>):</p>
+        <ul>
+            <li><strong>Initial State:</strong> <code>(1, 2, 3, 4, 0, 6, 7, 5, 8)</code></li>
+            <li><strong>Goal State:</strong> <code>(1, 2, 3, 4, 5, 6, 7, 8, 0)</code></li>
+            <li><strong>Operators:</strong> Slide the blank tile <code>0</code> Up, Down, Left, or Right within grid boundaries.</li>
+        </ul>
+
+        <div class="tree-diagram">Initial State:             Goal State:
+   +---+---+---+             +---+---+---+
+   | 1 | 2 | 3 |             | 1 | 2 | 3 |
+   +---+---+---+             +---+---+---+
+   | 4 | 0 | 6 |             | 4 | 5 | 6 |
+   +---+---+---+             +---+---+---+
+   | 7 | 5 | 8 |             | 7 | 8 | 0 |
+   +---+---+---+             +---+---+---+</div>
+
+        <h3>2. Heuristics: Misplaced Tiles vs Manhattan Distance</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Heuristic Metric</th>
+                    <th>Definition</th>
+                    <th>Admissible?</th>
+                    <th>Quality / Efficiency</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>h<sub>1</sub>: Misplaced Tiles</strong></td>
+                    <td>Number of tiles that are not in their final goal position</td>
+                    <td>Yes ($h_1 \le h^*$)</td>
+                    <td>Coarse estimate; explores many redundant states</td>
+                </tr>
+                <tr>
+                    <td><strong>h<sub>2</sub>: Manhattan Distance</strong></td>
+                    <td>Sum of horizontal and vertical distances of each tile from its goal coordinates:
+                    $$\sum_{i=1}^{8} |row_i - goal\_row_i| + |col_i - goal\_col_i|$$</td>
+                    <td>Yes ($h_2 \le h^*$)</td>
+                    <td><strong>Superior & Dominates h<sub>1</sub></strong>: $h_2(n) \ge h_1(n)$ for all states, expanding far fewer nodes!</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> In the 8-puzzle, the <strong>Manhattan Distance</strong> sums the exact horizontal and vertical steps each tile must take to reach its goal position. Because tiles cannot jump diagonally, this provides a strictly tighter, more informed bound than merely counting misplaced tiles, dramatically reducing explored states.
+        </div>
+
+        <h3>3. Complete Python Implementation</h3>
+        <div class="code-block">import heapq
+
+# Goal state configuration (0 represents the empty space)
+goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
+
+def heuristic(state):
+    # Calculates the Manhattan Distance of all numbered tiles from their goal slots
+    distance = 0
+    for i in range(9):
+        value = state[i]
+        if value != 0: # Ignore the blank tile
+            goal_pos = goal.index(value)
+            # Row distance + Column distance
+            distance += abs(i // 3 - goal_pos // 3)
+            distance += abs(i % 3 - goal_pos % 3)
+    return distance
+
+def neighbours(state):
+    result = []
+    zero = state.index(0) # Locate position of blank space
+    row, col = zero // 3, zero % 3
+
+    # Moves: Up, Down, Left, Right (dr, dc)
+    moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    for dr, dc in moves:
+        nr, nc = row + dr, col + dc
+        if 0 <= nr < 3 and 0 <= nc < 3: # Keep moves inside 3x3 grid
+            new_zero = nr * 3 + nc
+            new_state = list(state)
+            # Swap blank space with adjacent neighbor tile
+            new_state[zero], new_state[new_zero] = new_state[new_zero], new_state[zero]
+            result.append(tuple(new_state))
+
+    return result
+
+def astar(start):
+    # Priority Queue stores: (f_score, g_cost, state, path)
+    queue = [(heuristic(start), 0, start, [start])]
+    visited = set()
+
+    while queue:
+        f, g, state, path = heapq.heappop(queue)
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        if state == goal:
+            print("Solution:")
+            for step in path:
+                print(step)
+            return
+
+        # Generate neighbor states
+        for next_state in neighbours(state):
+            new_g = g + 1
+            new_f = new_g + heuristic(next_state)
+            heapq.heappush(queue, (new_f, new_g, next_state, path + [next_state]))
+
+if __name__ == "__main__":
+    start = (1, 2, 3, 4, 0, 6, 7, 5, 8)
+    astar(start)</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Solution:
+(1, 2, 3, 4, 0, 6, 7, 5, 8)
+(1, 2, 3, 4, 5, 6, 7, 0, 8)
+(1, 2, 3, 4, 5, 6, 7, 8, 0)</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To solve the 8-Puzzle sliding tile problem using A* Search and the Manhattan Distance heuristic.</li>
+                <li><strong>State Representation:</strong> A 9-element 1D tuple representing flattened 3&times;3 board coordinates.</li>
+                <li><strong>Heuristic Function:</strong> Sum of absolute row and column offsets: $|r - r_{goal}| + |c - c_{goal}|$.</li>
+                <li><strong>Solution Path Length:</strong> 2 moves to reach Goal State from given start state.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>Why is Manhattan Distance admissible for the 8-puzzle?</strong><br><em>Answer:</em> Each legal move of a tile changes its Manhattan distance by at most 1. Hence, the true number of remaining moves can never be less than the total Manhattan distance.</li>
+                <li><strong>How many total permutations exist in an 8-puzzle and are all solvable?</strong><br><em>Answer:</em> There are $9! = 362,880$ total permutations. Exactly half ($181,440$) are solvable; the other half cannot reach the goal due to permutation inversion parity.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 6: MINIMAX & ALPHA-BETA PRUNING -->
+        <!-- ========================================================================= -->
+        <h2 id="p6-alphabeta"><span class="badge badge-game">Slip 3, 8, 11</span> Practical 6: Minimax Search & Alpha-Beta Pruning</h2>
+
+        <h3>1. Adversarial Search Concepts (Two-Player Games)</h3>
+        <p>In two-player zero-sum perfect information games (such as Chess or Tic-Tac-Toe), two players compete against each other:</p>
+        <ul>
+            <li><strong>MAX Player:</strong> Aims to maximize their final payoff/utility.</li>
+            <li><strong>MIN Player:</strong> Aims to minimize MAX's payoff (maximizing their own utility).</li>
+        </ul>
+
+        <h3>2. Why Minimax Needs Optimization: The Exponential Explosion</h3>
+        <p>Standard Minimax searches <strong>all</strong> game tree paths to maximum depth $m$. With branching factor $b$, it visits <strong>$O(b^m)$</strong> nodes. In chess ($b \approx 35$), exploring even 5 plies requires examining millions of states.</p>
+
+        <h3>3. The Alpha-Beta Pruning Solution</h3>
+        <div class="highlight-box">
+            <strong>Alpha (&alpha;) and Beta (&beta;) Bounds:</strong>
+            <ul>
+                <li><strong>&alpha; (Alpha):</strong> The best (highest) guaranteed score for <strong>MAX</strong> along the current path (initialized to $-\infty$).</li>
+                <li><strong>&beta; (Beta):</strong> The best (lowest) guaranteed score for <strong>MIN</strong> along the current path (initialized to $+\infty$).</li>
+                <li><strong>The Pruning Condition:</strong> Whenever <strong>&alpha; &ge; &beta;</strong>, stop evaluating remaining sibling branches (<strong>Prune / Cutoff</strong>).</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> Alpha-Beta Pruning speeds up Minimax game tree evaluation by skipping branches that cannot influence the final decision. Once the condition $\alpha \ge \beta$ is met, neither MAX nor MIN will choose to enter that sub-branch, allowing the search to safely prune it.
+        </div>
+
+        <h3>4. Pruning Tree Diagram</h3>
+        <div class="tree-diagram">               Root (MAX) [Returns: 3]
+              /          \
+         B (MIN)        C (MIN)
+         /     \        /     \
+       [3]     [5]    [2]     [9] (PRUNED if alpha >= beta!)
+        ^
+      MIN chooses 3; MAX will get at least 3.
+      When C evaluates 2, MIN can force &le; 2.
+      Since MAX already has 3, branch with [9] is PRUNED!</div>
+
+        <h3>5. Complete Python Implementation</h3>
+        <div class="code-block">import math
+
+# Game tree structure with leaf evaluations
+tree = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': 3, 'E': 5, 'F': 2, 'G': 9
+}
+
+# 1. Standard Minimax (Explores all paths)
+def minimax(node, maximizing):
+    if isinstance(tree[node], int):
+        return tree[node] # Return leaf score
+        
+    values = [minimax(child, not maximizing) for child in tree[node]]
+    return max(values) if maximizing else min(values)
+
+# 2. Alpha-Beta Pruning (Skips redundant subtrees)
+def alpha_beta(node, alpha, beta, maximizing):
+    if isinstance(tree[node], int):
+        return tree[node]
+
+    if maximizing: # MAX Player's turn
+        value = -math.inf
+        for child in tree[node]:
+            value = max(value, alpha_beta(child, alpha, beta, False))
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                print(f"Pruning remaining branches under node {node} (alpha={alpha} >= beta={beta})")
+                break # Pruning cutoff
+        return value
+    else: # MIN Player's turn
+        value = math.inf
+        for child in tree[node]:
+            value = min(value, alpha_beta(child, alpha, beta, True))
+            beta = min(beta, value)
+            if alpha >= beta:
+                print(f"Pruning remaining branches under node {node} (alpha={alpha} >= beta={beta})")
+                break # Pruning cutoff
+        return value
+
+if __name__ == "__main__":
+    print("Minimax Result:   ", minimax('A', True))
+    print("Alpha-Beta Result:", alpha_beta('A', -math.inf, math.inf, True))</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Minimax Result:    3
+Alpha-Beta Result: 3</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement and compare Minimax Search and Alpha-Beta Pruning on a game tree.</li>
+                <li><strong>Alpha (&alpha;) Initial Value:</strong> $-\infty$ (Best choice for MAX).</li>
+                <li><strong>Beta (&beta;) Initial Value:</strong> $+\infty$ (Best choice for MIN).</li>
+                <li><strong>Pruning Criterion:</strong> $\alpha \ge \beta$.</li>
+                <li><strong>Efficiency:</strong> In the best case, Alpha-Beta halves the effective search depth complexity from $O(b^m)$ to $O(b^{m/2})$.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>Does Alpha-Beta Pruning alter the final move chosen compared to Minimax?</strong><br><em>Answer:</em> Absolutely not. Alpha-Beta Pruning produces the mathematically identical result as Minimax; it only cuts away branches that cannot possibly affect the final decision.</li>
+                <li><strong>What is the best-case time complexity of Alpha-Beta Pruning?</strong><br><em>Answer:</em> With perfect move ordering (best moves evaluated first), time complexity drops to $O(b^{m/2})$, effectively doubling the searchable lookahead depth.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 7: CONSTRAINT SATISFACTION PROBLEM (CSP) -->
+        <!-- ========================================================================= -->
+        <h2 id="p7-csp"><span class="badge badge-csp">Slip 2, 7</span> Practical 7: Constraint Satisfaction Problem (CSP) — Graph & Map Coloring</h2>
+
+        <h3>1. Formal Definition of CSP</h3>
+        <p>A <strong>Constraint Satisfaction Problem (CSP)</strong> consists of three fundamental components:</p>
+        <ul>
+            <li><strong>Variables (X):</strong> A finite set of variables: $\{X_1, X_2, \dots, X_n\}$. (e.g., regions or graph vertices $1, 2, 3, 4, 5$).</li>
+            <li><strong>Domains (D):</strong> A set of allowable values for each variable: $\{D_1, D_2, \dots, D_n\}$. (e.g., colors $\{\text{Blue, Green, Yellow, Red, Purple}\}$).</li>
+            <li><strong>Constraints (C):</strong> Rules restricting valid combinations of variable assignments. (e.g., adjacent regions cannot have identical colors).</li>
+        </ul>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> In a Constraint Satisfaction Problem (CSP), the goal is to discover a complete variable-value assignment that adheres to all restrictions simultaneously. For Map Coloring, adjacent regions cannot share colors; when an assignment causes a conflict, Backtracking undoes the step and tries the next candidate.
+        </div>
+
+        <h3>2. Pentagon / Graph Coloring Setup</h3>
+        <div class="tree-diagram">Graph Coloring (Adjacent nodes must have different colors):
+       (1)
+      /   \
+    (2)---(5)
+     |     |
+    (3)---(4)</div>
+
+        <h3>3. Complete Python Implementation (Backtracking Algorithm)</h3>
+        <div class="code-block"># Graph adjacency: which nodes share an edge
+graph = {
+    1: [2, 3, 4, 5],
+    2: [1, 3, 4, 5],
+    3: [1, 2, 4, 5],
+    4: [1, 2, 3, 5],
+    5: [1, 2, 3, 4]
+}
+
+nodes = [1, 2, 3, 4, 5]
+available_colors = ['Blue', 'Green', 'Yellow', 'Red', 'Purple']
+node_colors = {} # Stores final variable assignments: {node: color}
+
+def solve_csp(node_index):
+    # Base Case: All nodes have been successfully colored
+    if node_index == len(nodes):
+        return True
+        
+    current_node = nodes[node_index]
+    
+    # Try each available color
+    for color in available_colors:
+        # Check constraint safety against all connected neighbors
+        is_safe = True
+        for neighbor in graph[current_node]:
+            if neighbor in node_colors and node_colors[neighbor] == color:
+                is_safe = False # Conflict detected!
+                break
+                
+        if is_safe:
+            node_colors[current_node] = color # Assign color
+            
+            # Recurse to next unassigned node
+            if solve_csp(node_index + 1):
+                return True
+                
+            # BACKTRACK: If dead end encountered, unassign color and try next
+            del node_colors[current_node]
+            
+    return False # Trigger backtracking to previous caller
+
+if __name__ == "__main__":
+    print("Starting Backtracking Algorithm for CSP...")
+    if solve_csp(0):
+        print("Final Solution Found!")
+        for node in nodes:
+            print(f"Node {node} is colored {node_colors[node]}")
+    else:
+        print("No solution possible.")</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Final Solution Found!
+Node 1 is colored Blue
+Node 2 is colored Green
+Node 3 is colored Yellow
+Node 4 is colored Red
+Node 5 is colored Purple</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To solve a Constraint Satisfaction Problem (CSP) for Graph/Map Coloring using the Backtracking algorithm.</li>
+                <li><strong>Components:</strong> Variables (Nodes 1..5), Domain (Colors), Constraint ($\text{color}(u) \ne \text{color}(v)$ for adjacent edges).</li>
+                <li><strong>Algorithm:</strong> Backtracking Search with forward consistency checks.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>What is the difference between standard state-space search and CSP?</strong><br><em>Answer:</em> In standard search, states are atomic "black boxes" evaluated along a path to the goal. In CSP, states are explicitly structured as variable-value assignments, and success is defined solely by satisfying all constraints.</li>
+                <li><strong>What are MRV and LCV heuristics in CSP?</strong><br><em>Answer:</em> <strong>MRV (Minimum Remaining Values)</strong> picks the variable with the fewest legal values remaining ("fail-first"). <strong>LCV (Least Constraining Value)</strong> selects the value that leaves the most options open for neighboring variables.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- PRACTICAL 8: KNOWLEDGE BASE & BACKWARD CHAINING -->
+        <!-- ========================================================================= -->
+        <h2 id="p8-backward"><span class="badge badge-kr">Slip 11, 15</span> Practical 8: Knowledge Representation & Backward Chaining</h2>
+
+        <h3>1. Forward vs Backward Chaining</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Characteristic</th>
+                    <th>Forward Chaining (Data-Driven)</th>
+                    <th>Backward Chaining (Goal-Driven)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Starting Point</strong></td>
+                    <td>Starts with known <strong>facts</strong></td>
+                    <td>Starts with a hypothetical <strong>goal</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Direction</strong></td>
+                    <td>Bottom-up: Facts &rarr; Rules &rarr; Conclusions</td>
+                    <td>Top-down: Goal &rarr; Sub-goals &rarr; Verified Facts</td>
+                </tr>
+                <tr>
+                    <td><strong>Ideal For</strong></td>
+                    <td>Real-time monitoring, automated synthesis</td>
+                    <td>Medical diagnosis, debugging, fault finding</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="highlight-box">
+            <strong>Algorithmic Strategy:</strong> Backward Chaining is a top-down, goal-directed reasoning approach. Starting with a candidate hypothesis, the inference engine works in reverse through rule implications to determine whether the necessary supporting premises can be verified from base facts.
+        </div>
+
+        <h3>2. Complete Python Implementation</h3>
+        <div class="code-block"># Known verified facts in Knowledge Base
+facts = {"rain"}
+
+# Logical Rules: conclusion -> [required premises]
+rules = {
+    "wet_ground": ["rain"],
+    "slippery": ["wet_ground"],
+    "dangerous": ["slippery"]
+}
+
+def backward_chaining(goal):
+    # Base Case: Goal is already a verified fact
+    if goal in facts:
+        return True
+        
+    # If no rule concludes this goal, it cannot be proved
+    if goal not in rules:
+        return False
+
+    # Check if all sub-conditions of the rule can be recursively proved
+    for condition in rules[goal]:
+        if backward_chaining(condition):
+            facts.add(goal) # Add newly proven assertion to facts
+            return True
+
+    return False
+
+if __name__ == "__main__":
+    goal = "dangerous"
+    if backward_chaining(goal):
+        print("Goal proved:", goal)
+    else:
+        print("Goal cannot be proved")</div>
+
+        <h4>Expected Terminal Output</h4>
+        <div class="code-block">Goal proved: dangerous</div>
+
+        <div class="assignment-box">
+            <h3>Student Journal Format (SPPU Practical Copy)</h3>
+            <ul>
+                <li><strong>Aim:</strong> To implement the Backward Chaining inference engine on a propositional Knowledge Base.</li>
+                <li><strong>Inference Trace:</strong> <code>dangerous &larr; slippery &larr; wet_ground &larr; rain (Verified Fact)</code>.</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Essential Viva-Voce Questions</h3>
+            <ol>
+                <li><strong>Why is Backward Chaining preferred for diagnosis systems?</strong><br><em>Answer:</em> It tests only the relevant rules related to the specific hypothesis being investigated, avoiding unnecessary derivation of irrelevant facts.</li>
+            </ol>
+        </div>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 9: MASTER COMPARISON MATRIX -->
+        <!-- ========================================================================= -->
+        <h2 id="master-matrix">⚡ 9. Search Algorithms Master Matrix</h2>
+        <p>A consolidated master reference across all search techniques tested in university practical slips:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Algorithm</th>
+                    <th>Search Strategy</th>
+                    <th>Core Data Structure</th>
+                    <th>Time Complexity</th>
+                    <th>Space Complexity</th>
+                    <th>Complete?</th>
+                    <th>Optimal?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>BFS</strong></td>
+                    <td>Blind / Uninformed</td>
+                    <td>Queue (FIFO)</td>
+                    <td>$O(b^d)$</td>
+                    <td>$O(b^d)$</td>
+                    <td>Yes</td>
+                    <td>Yes (uniform costs)</td>
+                </tr>
+                <tr>
+                    <td><strong>DFS</strong></td>
+                    <td>Blind / Uninformed</td>
+                    <td>Stack (LIFO)</td>
+                    <td>$O(b^m)$</td>
+                    <td>$O(b \cdot m)$</td>
+                    <td>No (in infinite paths)</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>A* Search</strong></td>
+                    <td>Informed / Heuristic</td>
+                    <td>Priority Queue (Min-Heap)</td>
+                    <td>$O(b^d)$</td>
+                    <td>$O(b^d)$</td>
+                    <td>Yes</td>
+                    <td>Yes (if admissible)</td>
+                </tr>
+                <tr>
+                    <td><strong>Minimax</strong></td>
+                    <td>Adversarial Game</td>
+                    <td>Recursion / Call Stack</td>
+                    <td>$O(b^m)$</td>
+                    <td>$O(b \cdot m)$</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td><strong>Alpha-Beta</strong></td>
+                    <td>Adversarial Game</td>
+                    <td>Recursion with bounds</td>
+                    <td>$O(b^{m/2})$ [best]</td>
+                    <td>$O(b \cdot m)$</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td><strong>Backtracking CSP</strong></td>
+                    <td>Constraint Solving</td>
+                    <td>Recursive Stack</td>
+                    <td>$O(d^n)$</td>
+                    <td>$O(n)$</td>
+                    <td>Yes</td>
+                    <td>Yes</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr style="margin: 4rem 0; border: none; border-top: 2px dashed var(--border);">
+
+        <!-- ========================================================================= -->
+        <!-- SECTION 10: ULTIMATE VIVA-VOCE BANK -->
+        <!-- ========================================================================= -->
+        <h2 id="viva-bank">🎯 10. Ultimate Viva-Voce Question Bank (Top 20 Questions)</h2>
+
+        <div class="highlight-box">
+            <ol>
+                <li><strong>What are the 5 essential components of an AI search problem?</strong><br><em>Answer:</em> Initial State, Goal State, State Space, Operators/Actions, and Path Cost.</li>
+                <li><strong>What is the difference between informed and uninformed search?</strong><br><em>Answer:</em> Uninformed search relies solely on state generation order without knowing proximity to the goal. Informed search utilizes heuristic functions $h(n)$ to estimate remaining distance.</li>
+                <li><strong>Why does BFS find the shortest path in unweighted graphs?</strong><br><em>Answer:</em> It explores nodes level by level in strict FIFO queue order, guaranteeing that the shallowest goal is reached first.</li>
+                <li><strong>What is the purpose of the <code>collections.deque</code> module in Python?</strong><br><em>Answer:</em> Standard Python lists take $O(n)$ time to remove elements from index 0. <code>collections.deque</code> executes <code>popleft()</code> in constant $O(1)$ time.</li>
+                <li><strong>Explain the formula $f(n) = g(n) + h(n)$ in A* search.</strong><br><em>Answer:</em> $g(n)$ is the true known cost from start to $n$; $h(n)$ is the estimated cost from $n$ to goal; $f(n)$ is total estimated cost.</li>
+                <li><strong>What does it mean for a heuristic to be admissible?</strong><br><em>Answer:</em> It must never overestimate the actual true minimal cost to the goal ($h(n) \le h^*(n)$).</li>
+                <li><strong>What is Manhattan distance?</strong><br><em>Answer:</em> The sum of absolute differences in row and column coordinates: $|x_1 - x_2| + |y_1 - y_2|$.</li>
+                <li><strong>Why does Manhattan distance dominate misplaced tiles in the 8-puzzle?</strong><br><em>Answer:</em> Every misplaced tile is at least 1 move away, meaning Manhattan distance is always greater than or equal to misplaced tiles, providing tighter pruning while staying admissible.</li>
+                <li><strong>What is Alpha-Beta Pruning?</strong><br><em>Answer:</em> An optimization for Minimax that eliminates branches whenever $\alpha \ge \beta$, where $\alpha$ is MAX's guaranteed score and $\beta$ is MIN's guaranteed score.</li>
+                <li><strong>What is the cutoff condition in Alpha-Beta Pruning?</strong><br><em>Answer:</em> $\alpha \ge \beta$.</li>
+                <li><strong>What is a Constraint Satisfaction Problem (CSP)?</strong><br><em>Answer:</em> A problem framed in terms of Variables, Domains, and Constraints, where the goal is to find valid variable assignments satisfying all constraints.</li>
+                <li><strong>What is the difference between Forward and Backward Chaining?</strong><br><em>Answer:</em> Forward Chaining is data-driven (from facts to conclusion). Backward Chaining is goal-driven (from hypothesis back to supporting facts).</li>
+                <li><strong>What is the time complexity of BFS?</strong><br><em>Answer:</em> $O(b^d)$, where $b$ is the branching factor and $d$ is the goal depth.</li>
+                <li><strong>What is the space complexity of DFS?</strong><br><em>Answer:</em> $O(b \cdot m)$, where $m$ is the maximum tree depth.</li>
+                <li><strong>What happens if the heuristic in A* is $h(n) = 0$?</strong><br><em>Answer:</em> It degenerates into Dijkstra's Algorithm / Uniform Cost Search.</li>
+                <li><strong>Why is a visited set essential in graph search?</strong><br><em>Answer:</em> To prevent infinite loops caused by circular paths and redundant state expansions.</li>
+                <li><strong>In the Water Jug problem, what does <code>max(0, x - (3 - y))</code> calculate?</strong><br><em>Answer:</em> The remaining water in the 4L jug after pouring into the 3L jug until the 3L jug is filled to capacity (3L).</li>
+                <li><strong>What is a zero-sum game?</strong><br><em>Answer:</em> A game where the algebraic sum of payoffs for all players is zero; one player's gain is the exact loss of the opponent.</li>
+                <li><strong>Why does A* search use a Priority Queue?</strong><br><em>Answer:</em> To always retrieve the frontier state with the minimum $f(n)$ value in logarithmic time.</li>
+                <li><strong>Can DFS get trapped in an infinite loop?</strong><br><em>Answer:</em> Yes, if the state space contains infinite depth paths or cycles and states are not tracked with a visited collection.</li>
+            </ol>
+        </div>
+
     </div>
 </body>
 </html>
