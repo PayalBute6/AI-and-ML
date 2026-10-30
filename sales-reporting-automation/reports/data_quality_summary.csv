@@ -1,0 +1,13 @@
+Metric,Value
+Raw Total Rows,"541,909"
+Duplicate Rows Dropped,"5,268"
+Cancellation Rows Separated,"10,587"
+Zero/Negative Price Rows Excluded,"1,176"
+Clean Sales Records,"524,878"
+Missing Customer IDs (Sales),"132,186 (25.18%)"
+Earliest Transaction Date,2010-12-01 08:26:00
+Latest Transaction Date,2011-12-09 12:50:00
+Total Clean Sales Revenue (GBP),"£10,642,110.80"
+Total Units Sold,"5,572,420"
+Distinct Invoices,"19,960"
+Identified Unique Customers,"4,338"
